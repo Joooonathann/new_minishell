@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/19 16:12:39 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/19 23:04:46 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <linux/limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -24,6 +25,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
@@ -85,7 +87,7 @@ typedef struct s_minishell
 typedef struct s_lst_cmd
 {
 	char			*name;
-	void			(*func)(t_minishell data);
+	void			(*func)(t_minishell **data);
 }					t_lstcmd;
 
 // Token list
@@ -115,15 +117,20 @@ void				add_token_type(t_tokens **tokens);
 void				trime_useless_quotes(t_tokens **tokens);
 char				*add_char_to_str(char *str, char c);
 char				*ft_strcat_dynamic(char *dest, char *src);
+void				ft_error(int count, ...);
 
 // VARS - NEW
 t_vars				*init_vars(char **envp);
 void				add_vars(t_vars *new, t_vars **vars);
 t_vars				*get_vars(t_vars **env, char *key);
+void				env_command(t_minishell **data);
+void				extern_command(t_minishell **data);
+void				update_vars(t_vars **env, char *key, char *value);
 
 // BUILTINS / COMMANDS - NEW
-void				handler_exec(t_minishell data);
-void				handler_builtins(t_minishell data);
-void				echo_command(t_minishell data);
+void				handler_exec(t_minishell **data);
+void				handler_builtins(t_minishell **data);
+void				echo_command(t_minishell **data);
+void				pwd_command(t_minishell **data);
 
 #endif

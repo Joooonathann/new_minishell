@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:00:41 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 17:32:19 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/19 23:06:15 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,25 @@ static int	is_valid_option(const char *str)
 	return (1);
 }
 
-void	echo_command(t_minishell data)
+void	echo_command(t_minishell **data)
 {
 	int	is_valid;
 
 	is_valid = 0;
-	if (data.current_tokens->next)
+	if ((*data)->current_tokens->next)
 	{
-		data.current_tokens = data.current_tokens->next;
-		while (is_valid_option(data.current_tokens->value))
+		(*data)->current_tokens = (*data)->current_tokens->next;
+		while (is_valid_option((*data)->current_tokens->value))
 		{
 			is_valid = 1;
-			data.current_tokens = data.current_tokens->next;
+			(*data)->current_tokens = (*data)->current_tokens->next;
 		}
-		while (data.current_tokens)
+		while ((*data)->current_tokens)
 		{
-			printf("%s", data.current_tokens->value);
-			if (data.current_tokens->next)
+			printf("%s", (*data)->current_tokens->value);
+			if ((*data)->current_tokens->next)
 				printf(" ");
-			data.current_tokens = data.current_tokens->next;
+			(*data)->current_tokens = (*data)->current_tokens->next;
 		}
 	}
 	if (!is_valid)

@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 00:07:39 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 00:49:08 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/19 22:46:07 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,40 @@ static void	process_add(char *str, t_vars **vars)
 	}
 }
 
+void	init_hidden(t_vars **vars)
+{
+	t_vars	*new;
+
+	new = malloc(sizeof(t_vars));
+	if (!new)
+		return ;
+	new->key = ft_strdup("?");
+	if (!new->key)
+		return ;
+	new->value = ft_strdup("0");
+	if (!new->value)
+		return ;
+	new->hide = TRUE;
+	new->next = NULL;
+	if (!exist_vars(*vars, new->key))
+		add_vars(new, vars);
+	else
+	{
+		free(new->key);
+		free(new->value);
+		free(new);
+	}
+}
+
 t_vars	*init_vars(char **envp)
 {
-	t_vars *vars;
-	int i;
+	t_vars	*vars;
+	int		i;
 
 	vars = NULL;
 	i = 0;
 	while (envp[i])
 		process_add(envp[i++], &vars);
+	init_hidden(&vars);
 	return (vars);
 }

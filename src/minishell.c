@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:05:49 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 16:42:10 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/19 23:02:54 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,30 @@ char *create_prompt(void)
 	return (result);
 }
 
-t_minishell	init_data(char **envp)
+t_minishell	*init_data(char **envp)
 {
-	t_minishell	result;
+	t_minishell	*result;
 
-	result.env = init_vars(envp);
-	result.prompt = readline(create_prompt());
-	if (result.prompt)
-		result.tokens = parser(result.prompt, &result.env);
+	result = malloc(sizeof(t_minishell));
+	if (!result)
+		return (NULL);
+	result->env = init_vars(envp);
+	result->prompt = readline(create_prompt());
+	if (result->prompt)
+		result->tokens = parser(result->prompt, &result->env);
 	else
-		result.tokens = NULL;
-	if (result.tokens)
-		result.tokens_split = split_tokens(result.tokens);
+		result->tokens = NULL;
+	if (result->tokens)
+		result->tokens_split = split_tokens(result->tokens);
 	else
-		result.tokens_split = NULL;
-	result.current_tokens = NULL;
+		result->tokens_split = NULL;
+	result->current_tokens = NULL;
 	return (result);
 }
 
 int main(int argc, char **argv, char **envp)
 {
-	t_minishell	data;
+	t_minishell	*data;
 
 	(void) argv;
 	(void) argc;
@@ -58,14 +61,17 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		data = init_data(envp);
-		if (!data.prompt)
+		if (!data->prompt)
 		{
 			printf("exit\n");
 			break;
 		}
-		handler_exec(data);
-		ft_free_tokens(&data.tokens);
-		free(data.prompt);
+		if (data->tokens)
+		{
+			handler_exec(&data);
+			ft_free_tokens(&data->tokens);
+			free(data->prompt);
+		}
 	}
 	return (0);
 }
