@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/28 13:05:49 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 23:02:54 by jalbiser         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void	handler(int signal)
@@ -23,48 +11,52 @@ void	handler(int signal)
 	}
 }
 
-char *create_prompt(void)
+char	*create_prompt(void)
 {
-	char	*result = "Temp: ";
+	char	*result;
+
+	result = "Temp: ";
 	return (result);
 }
 
-t_minishell	*init_data(char **envp)
+t_minishell	*init_data(char **envp, t_minishell *data)
 {
-	t_minishell	*result;
-
-	result = malloc(sizeof(t_minishell));
-	if (!result)
-		return (NULL);
-	result->env = init_vars(envp);
-	result->prompt = readline(create_prompt());
-	if (result->prompt)
-		result->tokens = parser(result->prompt, &result->env);
+	if (!data)
+	{
+		data = malloc(sizeof(t_minishell));
+		if (!data)
+			return (NULL);
+		data->env = init_vars(envp);
+	}
+	data->prompt = readline(create_prompt());
+	if (data->prompt)
+		data->tokens = parser(data->prompt, &data->env);
 	else
-		result->tokens = NULL;
-	if (result->tokens)
-		result->tokens_split = split_tokens(result->tokens);
+		data->tokens = NULL;
+	if (data->tokens)
+		data->tokens_split = split_tokens(data->tokens);
 	else
-		result->tokens_split = NULL;
-	result->current_tokens = NULL;
-	return (result);
+		data->tokens_split = NULL;
+	data->current_tokens = NULL;
+	return (data);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*data;
 
-	(void) argv;
-	(void) argc;
+	data = NULL;
+	(void)argv;
+	(void)argc;
 	signal(SIGINT, handler);
 	signal(SIGQUIT, handler);
 	while (1)
 	{
-		data = init_data(envp);
+		data = init_data(envp, data);
 		if (!data->prompt)
 		{
 			printf("exit\n");
-			break;
+			break ;
 		}
 		if (data->tokens)
 		{
