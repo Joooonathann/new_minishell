@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:05:49 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 01:51:19 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:42:10 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_minishell	init_data(char **envp)
 		result.tokens_split = split_tokens(result.tokens);
 	else
 		result.tokens_split = NULL;
+	result.current_tokens = NULL;
 	return (result);
 }
 
@@ -62,17 +63,7 @@ int main(int argc, char **argv, char **envp)
 			printf("exit\n");
 			break;
 		}
-		int i = 0;
-		while (data.tokens_split[i])
-		{
-			while (data.tokens_split[i])
-			{
-				printf("%s", data.tokens_split[i]->value);
-				data.tokens_split[i] = data.tokens_split[i]->next;
-			}
-			printf("\n");
-			i++;
-		}
+		handler_exec(data);
 		ft_free_tokens(&data.tokens);
 		free(data.prompt);
 	}

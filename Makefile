@@ -6,7 +6,7 @@
 #    By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 11:55:17 by jalbiser          #+#    #+#              #
-#    Updated: 2024/09/19 01:42:04 by jalbiser         ###   ########.fr        #
+#    Updated: 2024/09/19 16:12:03 by jalbiser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,10 @@ SRC			=	./src/minishell.c\
 				./src/parsing/add_token_type.c\
 				./src/parsing/trime_useless_quotes.c\
 				./src/vars/init_vars.c\
-				./src/vars/get_vars.c
+				./src/vars/get_vars.c\
+				./src/builtins/commands/echo_command.c\
+				./src/builtins/handler_builtins.c\
+				./src/builtins/handler_exec.c
 				
 OBJ			=	${SRC:.c=.o}
 

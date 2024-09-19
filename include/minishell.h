@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/19 01:41:52 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/19 16:12:39 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,14 @@ typedef struct s_minishell
 	t_vars			*env;
 	t_tokens		*tokens;
 	t_tokens		**tokens_split;
+	t_tokens		*current_tokens;
 }					t_minishell;
+
+typedef struct s_lst_cmd
+{
+	char			*name;
+	void			(*func)(t_minishell data);
+}					t_lstcmd;
 
 // Token list
 void				ft_del_token(t_tokens **token, t_tokens **tokens);
@@ -113,5 +120,10 @@ char				*ft_strcat_dynamic(char *dest, char *src);
 t_vars				*init_vars(char **envp);
 void				add_vars(t_vars *new, t_vars **vars);
 t_vars				*get_vars(t_vars **env, char *key);
+
+// BUILTINS / COMMANDS - NEW
+void				handler_exec(t_minishell data);
+void				handler_builtins(t_minishell data);
+void				echo_command(t_minishell data);
 
 #endif
