@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:13 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/20 16:52:27 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:53:04 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	handle_env_vars(t_tokens *token, int *i, t_vars **env,
 			env_var = add_char_to_str(env_var, token->value[(*i)++]);
 	}
 	if (get_vars(env, env_var))
-		*expanded_value = ft_strcat_dynamic(*expanded_value, get_vars(env, env_var)->value);
+		*expanded_value = ft_strcat_dynamic(*expanded_value, get_vars(env,
+					env_var)->value);
 	free(env_var);
 }
