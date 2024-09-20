@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:13 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/20 16:38:52 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:52:27 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	handle_env_vars(t_tokens *token, int *i, t_vars **env,
 		char **expanded_value)
 {
 	char	*env_var;
-	t_vars	*tmp;
 
 	(void)expanded_value;
 	(void)env;
@@ -68,8 +67,7 @@ void	handle_env_vars(t_tokens *token, int *i, t_vars **env,
 				|| token->value[*i] == '_'))
 			env_var = add_char_to_str(env_var, token->value[(*i)++]);
 	}
-	tmp = get_vars(env, env_var);
-	if (tmp)
-		*expanded_value = ft_strcat_dynamic(*expanded_value, tmp->value);
+	if (get_vars(env, env_var))
+		*expanded_value = ft_strcat_dynamic(*expanded_value, get_vars(env, env_var)->value);
 	free(env_var);
 }
