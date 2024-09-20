@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 19:34:58 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 19:49:55 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*create_prompt(t_vars *env)
 	else
 		hostname = "42";
 	cwd = getcwd(NULL, 0);
-	if (get_vars(&env, "HOME")->value && ft_strncmp(cwd, get_vars(&env,
+	if (get_vars(&env, "HOME") && ft_strncmp(cwd, get_vars(&env,
 				"HOME")->value, ft_strlen(get_vars(&env, "HOME")->value)) == 0)
 		display_path = ft_strjoin("~", cwd + ft_strlen(get_vars(&env,
 						"HOME")->value));
