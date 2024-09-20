@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 04:02:15 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:19:09 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 19:39:56 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,32 @@ static int	process_delete(t_vars **env, t_vars **delete)
 		previous->next = current->next;
 	}
 	return (1);
+}
+
+void	up_shlvl(t_vars **env)
+{
+	t_vars	*new;
+	char	*tmp;
+	int		i;
+
+	if (get_vars(env, "SHLVL"))
+	{
+		i = ft_atoi(get_vars(env, "SHLVL")->value);
+		i++;
+		tmp = ft_itoa(i);
+		update_vars(env, "SHLVL", tmp);
+		free(tmp);
+	}
+	else
+	{
+		new = malloc(sizeof(t_vars));
+		if (!new)
+			return ;
+		new->value = ft_strdup("SHLVL");
+		new->key = ft_strdup("0");
+		new->next = NULL;
+		add_vars(new, env);
+	}
 }
 
 int	delete_vars(t_vars **env, t_vars *delete)

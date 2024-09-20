@@ -6,7 +6,7 @@
 #    By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 11:55:17 by jalbiser          #+#    #+#              #
-#    Updated: 2024/09/20 16:41:06 by jalbiser         ###   ########.fr        #
+#    Updated: 2024/09/20 19:27:19 by jalbiser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRC			=	./src/minishell.c\
 				./src/token_list/tokens_split.c\
 				./src/token_list/ft_count_tokens.c\
 				./src/token_list/ft_count_value_tokens.c\
+				./src/token_list/ft_free_tokens_split.c\
 				./src/parsing/init_ms_token.c\
 				./src/parsing/parser.c\
 				./src/parsing/tokenizer.c\

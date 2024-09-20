@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tokens.c                                   :+:      :+:    :+:   */
+/*   ft_free_tokens_split.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 10:50:32 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/20 19:26:26 by jalbiser         ###   ########.fr       */
+/*   Created: 2024/09/20 19:16:42 by jalbiser          #+#    #+#             */
+/*   Updated: 2024/09/20 19:28:36 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_free_tokens(t_tokens **tokens)
+void	ft_free_tokens_split(t_tokens **tokens)
 {
-	t_tokens	*previous_token;
+	int	i;
 
-	if (!tokens || !*tokens)
-		return ;
-	while (*tokens)
+	i = 0;
+	if (!tokens)
+		return;
+	while (tokens[i])
 	{
-		previous_token = *tokens;
-		*tokens = (*tokens)->next;
-		if (previous_token->value)
-		{
-			free(previous_token->value);
-			previous_token->value = NULL;
-		}
-		free(previous_token);
-		previous_token = NULL;
+		ft_free_tokens(&tokens[i]);
+		tokens[i] = NULL;
+		i++;
 	}
-	*tokens = NULL;
+	free(tokens);
+	tokens = NULL;
 }

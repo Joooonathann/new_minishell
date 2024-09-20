@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:19:41 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 19:34:58 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,36 @@ void	handler(int signal)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	else if (signal == SIGQUIT)
+		return ;
 }
 
-char	*create_prompt(void)
+char	*create_prompt(t_vars *env)
 {
-	char	*result;
+	char	*cwd;
+	char	*display_path;
+	char	*hostname;
+	char	*prompt;
+	char	buffer[1024];
 
-	result = "Temp: ";
-	return (result);
+	if (gethostname(buffer, sizeof(buffer)) == 0)
+		hostname = buffer;
+	else
+		hostname = "42";
+	cwd = getcwd(NULL, 0);
+	if (get_vars(&env, "HOME")->value && ft_strncmp(cwd, get_vars(&env,
+				"HOME")->value, ft_strlen(get_vars(&env, "HOME")->value)) == 0)
+		display_path = ft_strjoin("~", cwd + ft_strlen(get_vars(&env,
+						"HOME")->value));
+	else
+		display_path = ft_strdup(cwd);
+	prompt = ft_strjoin_three(get_vars(&env, "USER")->value, "@", hostname);
+	prompt = ft_strjoin_free(prompt, ":");
+	prompt = ft_strjoin_free(prompt, display_path);
+	prompt = ft_strjoin_free(prompt, "$ ");
+	free(cwd);
+	free(display_path);
+	return (prompt);
 }
 
 t_minishell	*init_data(char **envp, t_minishell *data)
@@ -40,7 +62,8 @@ t_minishell	*init_data(char **envp, t_minishell *data)
 			return (NULL);
 		data->env = init_vars(envp);
 	}
-	data->prompt = readline(create_prompt());
+	data->prompt_value = create_prompt(data->env);
+	data->prompt = readline(data->prompt_value);
 	if (data->prompt)
 		data->tokens = parser(data->prompt, &data->env);
 	else
@@ -52,6 +75,20 @@ t_minishell	*init_data(char **envp, t_minishell *data)
 	data->files = NULL;
 	data->current_tokens = NULL;
 	return (data);
+}
+
+void	clean_process(t_minishell **data, BOOL env)
+{
+	if ((*data)->tokens)
+		ft_free_tokens(&(*data)->tokens);
+	if ((*data)->tokens_split)
+		free((*data)->tokens_split);
+	if ((*data)->prompt)
+		free((*data)->prompt);
+	if ((*data)->prompt_value)
+		free((*data)->prompt_value);
+	if ((*data)->env && env)
+		delete_all_vars(&(*data)->env);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -68,14 +105,16 @@ int	main(int argc, char **argv, char **envp)
 		data = init_data(envp, data);
 		if (!data->prompt)
 		{
+			clean_process(&data, TRUE);
 			printf("exit\n");
 			break ;
 		}
+		if (*data->prompt)
+			add_history(data->prompt);
 		if (data->tokens)
 		{
 			handler_exec(&data);
-			ft_free_tokens(&data->tokens);
-			free(data->prompt);
+			clean_process(&data, FALSE);
 		}
 	}
 	return (0);

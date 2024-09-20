@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 00:07:39 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:19:02 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 19:36:30 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,6 @@ t_vars	*init_vars(char **envp)
 	while (envp[i])
 		process_add(envp[i++], &vars);
 	init_hidden(&vars);
+	up_shlvl(&vars);
 	return (vars);
 }

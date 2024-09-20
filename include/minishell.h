@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/20 16:38:28 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 19:40:06 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_minishell
 	t_tokens		**tokens_split;
 	t_tokens		*current_tokens;
 	t_file			*files;
+	char			*prompt_value;
 }					t_minishell;
 
 typedef struct s_lst_cmd
@@ -107,6 +108,7 @@ t_tokens			*ft_tokennew(char *value);
 int					ft_count_tokens(t_tokens *tokens);
 int					ft_count_value_tokens(t_tokens *tokens);
 t_tokens			**split_tokens(t_tokens *tokens);
+void				ft_free_tokens_split(t_tokens **tokens);
 
 //	PARSING
 int					count_quote(char *str, QUOTE quote_type);
@@ -174,5 +176,7 @@ int					is_redirection(char *value);
 t_tokens			*get_tokens_new(t_tokens *tokens);
 int					count_tokens_split(t_tokens **tokens);
 int					nofork_command(t_tokens *tokens);
+void				clean_process(t_minishell **data, BOOL env);
+void				up_shlvl(t_vars **env);
 
 #endif
