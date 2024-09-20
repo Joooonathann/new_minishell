@@ -6,96 +6,11 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:29:22 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 04:02:04 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:01:25 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	insert_sorted(t_vars **sorted, t_vars *new)
-{
-	t_vars	*current;
-
-	if (*sorted == NULL || ft_strcmp_tr((*sorted)->key, new->key) > 0)
-	{
-		new->next = *sorted;
-		*sorted = new;
-	}
-	else
-	{
-		current = *sorted;
-		while (current->next && ft_strcmp_tr(current->next->key, new->key) < 0)
-			current = current->next;
-		new->next = current->next;
-		current->next = new;
-	}
-}
-
-t_vars	*sort_vars(t_vars *vars)
-{
-	t_vars	*sorted;
-	t_vars	*next;
-
-	sorted = NULL;
-	while (vars)
-	{
-		next = vars->next;
-		insert_sorted(&sorted, vars);
-		vars = next;
-	}
-	return (sorted);
-}
-
-t_vars	*dup_env(t_vars *vars)
-{
-	t_vars	*result;
-	t_vars	*new;
-
-	result = NULL;
-	while (vars)
-	{
-		if (vars->hide == FALSE)
-		{
-			new = malloc(sizeof(t_vars));
-			if (!new)
-				return (NULL);
-			new->key = ft_strdup(vars->key);
-			new->value = ft_strdup(vars->value);
-			new->hide = FALSE;
-			new->next = NULL;
-			add_vars(new, &result);
-		}
-		vars = vars->next;
-	}
-	return (result);
-}
-
-void	print_env(t_vars *vars)
-{
-	t_vars	*sorted_vars;
-
-	sorted_vars = sort_vars(dup_env(vars));
-	while (sorted_vars)
-	{
-		printf("declare -x %s", sorted_vars->key);
-		if (sorted_vars->value)
-			printf("=\"%s\"", sorted_vars->value);
-		printf("\n");
-		sorted_vars = sorted_vars->next;
-	}
-	delete_all_vars(&sorted_vars);
-}
-
-static int	calculate_size_export(char *str, BOOL add)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && (str[i] != '=' && !(add && str[i] == '+' && str[i
-				+ 1] == '=')))
-		i++;
-	return (i);
-}
 
 static int	is_valid_splited(char *str)
 {
@@ -117,51 +32,52 @@ static int	is_valid_splited(char *str)
 	return (1);
 }
 
+static void	handle_value_append(char *str, t_vars *new, t_vars *tmp, BOOL add)
+{
+	char	*new_value;
+	int		value_start;
+
+	if (tmp->value)
+	{
+		value_start = calculate_size_export(str, add) + 2;
+		new_value = malloc(sizeof(char) * (ft_strlen(tmp->value)
+					+ ft_strlen(str) - value_start + 1));
+		if (!new_value)
+			return ;
+		ft_strcpy(new_value, tmp->value);
+		ft_strcat(new_value, str + value_start);
+		new->value = new_value;
+	}
+	else
+		new->value = ft_strndup_range(str, calculate_size_export(str, add) + 2,
+				ft_strlen(str));
+}
+
+static void	handle_value_set(char *str, t_vars *new, BOOL add)
+{
+	if (calculate_size_export(str, add) == (int)ft_strlen(str))
+		new->value = NULL;
+	else
+		new->value = ft_strndup_range(str, calculate_size_export(str, add) + 1,
+				ft_strlen(str));
+}
+
 void	add_vars_export(char *str, t_minishell **data, BOOL add)
 {
 	t_vars	*new;
 	t_vars	*tmp;
-	char	*new_value;
-	int		value_start;
 
 	new = malloc(sizeof(t_vars));
 	if (!new)
 		return ;
 	new->key = ft_strndup_range(str, 0, calculate_size_export(str, add) - 1);
-	if (calculate_size_export(str, add) == (int)ft_strlen(str))
-		new->value = NULL;
+	tmp = get_vars(&(*data)->env, new->key);
+	if (add)
+		handle_value_append(str, new, tmp, add);
 	else
-	{
-		if (add)
-		{
-			tmp = get_vars(&(*data)->env, new->key);
-			if (tmp->value)
-			{
-				value_start = calculate_size_export(str, add) + 2;
-				new_value = malloc(sizeof(char) * (ft_strlen(tmp->value)
-							+ ft_strlen(str) - value_start + 1));
-				if (!new_value)
-					return ;
-				ft_strcpy(new_value, tmp->value);
-				ft_strcat(new_value, str + value_start);
-				new->value = new_value;
-				delete_vars(&(*data)->env, tmp);
-			}
-			else
-			{
-				if (tmp)
-					delete_vars(&(*data)->env, tmp);
-				free(new->value);
-				new->value = ft_strndup_range(str, calculate_size_export(str,
-							add) + 2, ft_strlen(str));
-			}
-		}
-		else
-		{
-			new->value = ft_strndup_range(str, calculate_size_export(str, add)
-					+ 1, ft_strlen(str));
-		}
-	}
+		handle_value_set(str, new, add);
+	if (tmp)
+		delete_vars(&(*data)->env, tmp);
 	new->hide = FALSE;
 	new->next = NULL;
 	add_vars(new, &(*data)->env);

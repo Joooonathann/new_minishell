@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:13 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/19 01:23:30 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:38:52 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ char	*ft_strcat_dynamic(char *dest, char *src)
 	return (result);
 }
 
-void	handle_quotes(BOOL *in_quote, QUOTE *quote_type,
-						char c, char **expanded_value)
+void	handle_quotes(BOOL *in_quote, QUOTE *quote_type, char c,
+		char **expanded_value)
 {
 	*in_quote = !(*in_quote);
 	if (*in_quote)
@@ -50,23 +50,25 @@ void	handle_quotes(BOOL *in_quote, QUOTE *quote_type,
 	*expanded_value = add_char_to_str(*expanded_value, c);
 }
 
-void	handle_env_vars(t_tokens *token, int *i,
-						t_vars **env, char **expanded_value)
+void	handle_env_vars(t_tokens *token, int *i, t_vars **env,
+		char **expanded_value)
 {
-	(void) expanded_value;
-	(void) env;
 	char	*env_var;
+	t_vars	*tmp;
+
+	(void)expanded_value;
+	(void)env;
 	env_var = NULL;
 	(*i)++;
 	if (token->value[*i] == '?')
 		env_var = add_char_to_str(env_var, token->value[(*i)++]);
 	else
 	{
-		while (token->value[*i]
-			&& (ft_isalnum(token->value[*i]) || token->value[*i] == '_'))
+		while (token->value[*i] && (ft_isalnum(token->value[*i])
+				|| token->value[*i] == '_'))
 			env_var = add_char_to_str(env_var, token->value[(*i)++]);
 	}
-	t_vars *tmp = get_vars(env, env_var);
+	tmp = get_vars(env, env_var);
 	if (tmp)
 		*expanded_value = ft_strcat_dynamic(*expanded_value, tmp->value);
 	free(env_var);

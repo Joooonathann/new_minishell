@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 01:37:42 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 01:49:39 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:20:00 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_tokens	**split_tokens(t_tokens *tokens)
 		if (ft_strcmp(tokens->value, "|"))
 			result[++i] = NULL;
 		else
-		{	
+		{
 			ft_tokenadd_back(&result[i], ft_tokennew(tokens->value));
 			result[i]->type = tokens->type;
 		}

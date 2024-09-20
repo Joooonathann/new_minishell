@@ -6,7 +6,7 @@
 #    By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 11:55:17 by jalbiser          #+#    #+#              #
-#    Updated: 2024/09/20 04:02:45 by jalbiser         ###   ########.fr        #
+#    Updated: 2024/09/20 16:41:06 by jalbiser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,13 @@ SRC			=	./src/minishell.c\
 				./src/builtins/commands/export_command.c\
 				./src/builtins/commands/cd_command.c\
 				./src/builtins/commands/unset_command.c\
+				./src/builtins/commands/utils/utils_export.c\
+				./src/builtins/commands/utils/utils_cd.c\
+				./src/builtins/commands/utils/utils_extern.c\
+				./src/builtins/commands/utils/exec_redirection.c\
+				./src/builtins/commands/utils/exec_system.c\
+				./src/builtins/commands/utils/exec_utils.c\
+				./src/builtins/commands/utils/exec_func.c\
 				./src/builtins/handler_builtins.c\
 				./src/builtins/handler_exec.c
 				

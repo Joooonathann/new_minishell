@@ -1,28 +1,65 @@
-#include "minishell.h"
-#include <errno.h>
-#include <sys/stat.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_command.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/20 16:05:03 by jalbiser          #+#    #+#             */
+/*   Updated: 2024/09/20 16:10:03 by jalbiser         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	exist_vars_masked(t_vars *vars, char *key)
+#include "minishell.h"
+
+static void	handle_symlink(t_minishell **data, char *path, char *current_pwd)
 {
-	while (vars)
+	int		q;
+	char	*tmp;
+
+	q = ft_strlen(current_pwd);
+	while (q > 0 && current_pwd[q - 1] != '/')
+		q--;
+	tmp = malloc(sizeof(char) * (q + ft_strlen(path) + 1));
+	if (!tmp)
 	{
-		if (ft_strcmp(vars->value, key) && vars->hide)
-			return (1);
-		vars = vars->next;
+		ft_error(1, "bash: cd: malloc error");
+		free(current_pwd);
+		return ;
 	}
-	return (0);
+	ft_strlcpy(tmp, current_pwd, q + 1);
+	ft_strcat(tmp, path);
+	update_vars(&(*data)->env, "PWD", tmp);
+	free(tmp);
+}
+
+static void	handle_cd_command(t_minishell **data, char *path, struct stat info)
+{
+	char	*current_pwd;
+
+	if (chdir(path) != 0)
+	{
+		handle_chdir_error(path, data);
+		return ;
+	}
+	current_pwd = getcwd(NULL, 0);
+	if (current_pwd)
+	{
+		if (S_ISLNK(info.st_mode))
+			handle_symlink(data, path, current_pwd);
+		else
+			update_vars(&(*data)->env, "PWD", current_pwd);
+		free(current_pwd);
+	}
+	else
+		ft_error(1, "bash: cd: getcwd error");
 }
 
 void	cd_command(t_minishell **data)
 {
 	char		*path;
-	char		*current_pwd;
-	t_vars		*home_var;
-	t_tokens	*token;
 	struct stat	info;
-	char		*temp;
-	char		*tmp;
-	int			q;
+	t_tokens	*token;
 
 	token = (*data)->current_tokens;
 	if (ft_count_tokens(token) > 2)
@@ -31,33 +68,9 @@ void	cd_command(t_minishell **data)
 		update_vars(&(*data)->env, "?", "1");
 		return ;
 	}
-	if (ft_count_tokens(token) == 1 || (token->next
-			&& ft_strcmp(token->next->value, "~")))
-	{
-		home_var = get_vars(&(*data)->env, "HOME");
-		if (!home_var || !home_var->value)
-		{
-			ft_error(1, "bash: cd: HOME not set");
-			update_vars(&(*data)->env, "?", "1");
-			return ;
-		}
-		path = ft_strdup(home_var->value);
-	}
-	else
-	{
-		token = token->next;
-		path = ft_strdup(token->value);
-		if (path[0] == '~')
-		{
-			home_var = get_vars(&(*data)->env, "HOME");
-			if (home_var && home_var->value)
-			{
-				temp = path;
-				path = ft_strjoin(home_var->value, path + 1);
-				free(temp);
-			}
-		}
-	}
+	if (!handle_home_path(data, &path, token))
+		return ;
+	handle_tilde(data, &path);
 	if (lstat(path, &info) == -1)
 	{
 		ft_error(4, "bash: cd: ", path, ": ", strerror(errno));
@@ -65,62 +78,7 @@ void	cd_command(t_minishell **data)
 		free(path);
 		return ;
 	}
-	if (chdir(path) != 0)
-	{
-		ft_error(3, "bash: cd: ", path, ": No such file or directory");
-		update_vars(&(*data)->env, "?", "1");
-		free(path);
-		return ;
-	}
-	if (!exist_vars_masked((*data)->env, "OLDPWD"))
-	{
-		t_vars	*new;
-		new = malloc(sizeof(t_vars));
-		new->key = "OLDPWD";
-		new->value = NULL;
-		new->hide = TRUE;
-		new->next = NULL;
-		add_vars(new, &(*data)->env);
-	}
-	if (!exist_vars_masked((*data)->env, "PWD"))
-	{
-		t_vars	*new;
-		new = malloc(sizeof(t_vars));
-		new->key = "PWD";
-		new->value = NULL;
-		new->hide = TRUE;
-		new->next = NULL;
-		add_vars(new, &(*data)->env);
-	}
-	update_vars(&(*data)->env, "OLDPWD", get_vars(&(*data)->env, "PWD")->value);
-	current_pwd = getcwd(NULL, 0);
-	if (current_pwd)
-	{
-		if (S_ISLNK(info.st_mode))
-		{
-			q = ft_strlen(current_pwd);
-			while (q > 0 && current_pwd[q - 1] != '/')
-				q--;
-			tmp = malloc(sizeof(char) * (q + ft_strlen(path) + 1));
-			if (!tmp)
-			{
-				ft_error(1, "bash: cd: malloc error");
-				free(current_pwd);
-				return ;
-			}
-			ft_strlcpy(tmp, current_pwd, q + 1);
-			ft_strcat(tmp, path);
-			update_vars(&(*data)->env, "PWD", tmp);
-			free(tmp);
-		}
-		else
-			update_vars(&(*data)->env, "PWD", current_pwd);
-		free(current_pwd);
-	}
-	else
-	{
-		ft_error(1, "bash: cd: getcwd error");
-	}
+	handle_cd_command(data, path, info);
 	free(path);
 	update_vars(&(*data)->env, "?", "0");
 }

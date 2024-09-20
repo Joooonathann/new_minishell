@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 00:40:42 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 01:15:47 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:19:21 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	update_vars(t_vars **env, char *key, char *value)
 
 t_vars	*get_vars(t_vars **env, char *key)
 {
-	t_vars *tmp;
+	t_vars	*tmp;
 
 	tmp = *env;
 	while (tmp)

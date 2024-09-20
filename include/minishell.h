@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/20 07:08:43 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:38:28 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,5 +146,33 @@ void				exit_command(t_minishell **data);
 void				export_command(t_minishell **data);
 void				cd_command(t_minishell **data);
 void				unset_command(t_minishell **data);
+
+// UTILS
+void				insert_sorted(t_vars **sorted, t_vars *new);
+t_vars				*sort_vars(t_vars *vars);
+t_vars				*dup_env(t_vars *vars);
+void				print_env(t_vars *vars);
+int					calculate_size_export(char *str, BOOL add);
+int					handle_home_path(t_minishell **data, char **path,
+						t_tokens *token);
+void				handle_tilde(t_minishell **data, char **path);
+void				handle_chdir_error(char *path, t_minishell **data);
+int					get_count_vars(t_vars *env);
+char				**get_env(t_vars *env);
+char				*build_full_path(char *dir, char *cmd);
+void				exit_perror(char *message);
+void				handle_output_redirection(t_file *file, int flags);
+void				handle_input_redirection(t_file *file);
+void				write_heredoc_line(int heredoc_pipe[2], char *line);
+void				handle_heredoc(t_file *file);
+void				handle_redirection(t_file *file);
+void				fetch_redirection(t_minishell **data, t_tokens *tokens);
+t_file				*get_files(t_tokens *tokens);
+t_file				*new_file(char *value, char *type);
+void				add_file(t_file **tokens, t_file *new);
+int					is_redirection(char *value);
+t_tokens			*get_tokens_new(t_tokens *tokens);
+int					count_tokens_split(t_tokens **tokens);
+int					nofork_command(t_tokens *tokens);
 
 #endif

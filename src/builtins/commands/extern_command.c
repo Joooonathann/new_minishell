@@ -6,53 +6,11 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 18:01:41 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 04:12:55 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:17:32 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	get_count_vars(t_vars *env)
-{
-	int	i;
-
-	i = 0;
-	while (env)
-	{
-		if (!env->hide)
-			i++;
-		env = env->next;
-	}
-	return (i);
-}
-
-static char	**get_env(t_vars *env)
-{
-	char	**result;
-	int		i;
-
-	result = malloc(sizeof(char *) * (get_count_vars(env) + 1));
-	if (!result)
-		return (NULL);
-	i = 0;
-	while (env)
-	{
-		if (!env->hide)
-		{
-			result[i] = malloc(sizeof(char) * (ft_strlen(env->key)
-						+ ft_strlen(env->value) + 2));
-			if (!result[i])
-				return (NULL);
-			ft_strcpy(result[i], env->key);
-			ft_strcat(result[i], "=");
-			ft_strcat(result[i], env->value);
-			i++;
-		}
-		env = env->next;
-	}
-	result[i] = NULL;
-	return (result);
-}
 
 static char	*get_path(t_minishell *data)
 {
@@ -70,13 +28,10 @@ static char	*get_path(t_minishell *data)
 	i = 0;
 	while (splited_path[i])
 	{
-		full_path = malloc(sizeof(char) * (ft_strlen(splited_path[i])
-					+ ft_strlen(data->current_tokens->value) + 2));
+		full_path = build_full_path(splited_path[i],
+				data->current_tokens->value);
 		if (!full_path)
 			return (NULL);
-		ft_strcpy(full_path, splited_path[i]);
-		ft_strcat(full_path, "/");
-		ft_strcat(full_path, data->current_tokens->value);
 		if (access(full_path, X_OK) == 0)
 			return (full_path);
 		free(full_path);
@@ -107,50 +62,55 @@ static char	**get_args(t_tokens *tokens, char *command_path)
 	return (result);
 }
 
-void	extern_command(t_minishell **data)
+static void	handle_command_errors(char *cmd_path)
 {
-	char		*command_path;
-	char		**args;
-	char		**envp;
 	struct stat	file_stat;
 
-	if (ft_strchr((*data)->current_tokens->value, '/'))
-		command_path = (*data)->current_tokens->value;
-	else
-		command_path = get_path(*data);
-	args = get_args((*data)->current_tokens, command_path);
-	envp = get_env((*data)->env);
-	if (!command_path)
+	if (lstat(cmd_path, &file_stat) == 0 && S_ISDIR(file_stat.st_mode))
 	{
-		fprintf(stderr, "%s: command not found\n",
-			(*data)->current_tokens->value);
-		exit(127);
+		ft_error(2, cmd_path, ": Is a directory");
+		exit(126);
 	}
-	if (lstat(command_path, &file_stat) == 0)
-	{
-		if (S_ISDIR(file_stat.st_mode))
-		{
-			fprintf(stderr, "%s: Is a directory\n",
-				(*data)->current_tokens->value);
-			exit(126);
-		}
-	}
-	if (execve(command_path, args, envp) == -1)
+}
+
+void	exec_command(char *cmd_path, char **args, char **envp)
+{
+	if (execve(cmd_path, args, envp) == -1)
 	{
 		if (errno == EACCES)
 		{
-			fprintf(stderr, "%s: Permission denied\n",
-				(*data)->current_tokens->value);
+			ft_error(2, cmd_path, ": Permission denied");
 			exit(126);
 		}
 		else if (errno == ENOENT)
 		{
-			fprintf(stderr, "%s: No such file or directory\n",
-				(*data)->current_tokens->value);
+			ft_error(2, cmd_path, ": No such file or directory");
 			exit(127);
 		}
 		else
 			exit(EXIT_FAILURE);
 	}
-	exit(0);
+}
+
+void	extern_command(t_minishell **data)
+{
+	char	*command_path;
+	char	**args;
+	char	**envp;
+
+	command_path = NULL;
+	if (ft_strchr((*data)->current_tokens->value, '/'))
+		command_path = (*data)->current_tokens->value;
+	else
+		command_path = get_path(*data);
+	if (!command_path)
+	{
+		ft_error(2, (*data)->current_tokens->value, ": command not found");
+		exit(127);
+	}
+	args = get_args((*data)->current_tokens, command_path);
+	envp = get_env((*data)->env);
+	handle_command_errors(command_path);
+	exec_command(command_path, args, envp);
+	exit(EXIT_SUCCESS);
 }

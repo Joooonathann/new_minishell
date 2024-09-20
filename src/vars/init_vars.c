@@ -6,26 +6,11 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 00:07:39 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 22:46:07 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:19:02 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	add_vars(t_vars *new, t_vars **vars)
-{
-	t_vars	*tmp;
-
-	tmp = *vars;
-	if (!*vars)
-		*vars = new;
-	else
-	{
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-}
 
 static int	calculate_size(char *str)
 {
