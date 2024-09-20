@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:09:03 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:09:45 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 21:08:51 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,4 @@ void	handle_chdir_error(char *path, t_minishell **data)
 {
 	ft_error(3, "bash: cd: ", path, ": No such file or directory");
 	update_vars(&(*data)->env, "?", "1");
-	free(path);
 }

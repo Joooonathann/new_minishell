@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:25:43 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 20:34:48 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:56:42 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ static void	handle_input_redirection(t_minishell **data)
 	{
 		fprintf(stderr, "Error: %s is not a regular file\n",
 			(*data)->files->name);
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 	fd = open((*data)->files->name, O_RDONLY);
 	if (fd < 0)
 	{
 		perror("Error opening file for reading");
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
@@ -48,19 +48,26 @@ static void	handle_output_redirection(t_minishell **data, int flags)
 		perror("Error opening file");
 		exit(EXIT_FAILURE);
 	}
-	if (!(*data)->files->next)
-		dup2(fd, STDOUT_FILENO);
+	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
 
 void	fetch_redirection(t_minishell **data, t_tokens *tokens)
 {
+	t_file	*current;
+
 	(*data)->files = get_files(tokens);
+	current = (*data)->files;
 	while ((*data)->files)
 	{
 		if (ft_strcmp((*data)->files->type, "<<"))
 			handle_heredoc(data);
-		else if (ft_strcmp((*data)->files->type, "<"))
+		(*data)->files = (*data)->files->next;
+	}
+	(*data)->files = current;
+	while ((*data)->files)
+	{
+		if (ft_strcmp((*data)->files->type, "<"))
 			handle_input_redirection(data);
 		else if (ft_strcmp((*data)->files->type, ">"))
 			handle_output_redirection(data, O_WRONLY | O_CREAT | O_TRUNC);
