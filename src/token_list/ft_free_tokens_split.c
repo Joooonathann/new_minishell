@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 19:16:42 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 19:28:36 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:35:00 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_free_tokens_split(t_tokens **tokens)
 
 	i = 0;
 	if (!tokens)
-		return;
+		return ;
 	while (tokens[i])
 	{
 		ft_free_tokens(&tokens[i]);

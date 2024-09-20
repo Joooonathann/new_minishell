@@ -6,46 +6,57 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:29:18 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:39:30 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:32:04 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	write_heredoc_line(int heredoc_pipe[2], char *line)
+void	write_to_heredoc_pipe(int fd, const char *line)
 {
-	write(heredoc_pipe[1], line, ft_strlen(line));
-	write(heredoc_pipe[1], "\n", 1);
-	free(line);
+	write(fd, line, ft_strlen(line));
+	write(fd, "\n", 1);
 }
 
-void	handle_input_redirection(t_file *file)
+void	close_heredoc_pipe(int fd)
 {
-	struct stat	file_stat;
-	int			fd;
-
-	if (lstat(file->name, &file_stat) == -1 || !S_ISREG(file_stat.st_mode))
-		exit_perror("Error: not a regular file");
-	fd = open(file->name, O_RDONLY);
-	if (fd < 0)
-		exit_perror("Error opening file for reading");
-	dup2(fd, STDIN_FILENO);
 	close(fd);
 }
 
-void	handle_output_redirection(t_file *file, int flags)
+void	read_heredoc_lines(t_minishell **data, int heredoc_pipe)
 {
-	int	fd;
+	char	*line;
 
-	fd = open(file->name, flags, 0644);
-	if (fd < 0)
-		exit_perror("Error opening file for writing");
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+		{
+			close_heredoc_pipe(heredoc_pipe);
+			exit(EXIT_FAILURE);
+		}
+		if (ft_strcmp(line, (*data)->files->name))
+		{
+			free(line);
+			break ;
+		}
+		write_to_heredoc_pipe(heredoc_pipe, line);
+		free(line);
+	}
 }
 
-void	exit_perror(char *message)
+void	handle_heredoc(t_minishell **data)
 {
-	perror(message);
-	exit(EXIT_FAILURE);
+	int	heredoc_pipe[2];
+
+	if (pipe(heredoc_pipe) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	read_heredoc_lines(data, heredoc_pipe[1]);
+	close_heredoc_pipe(heredoc_pipe[1]);
+	if (!(*data)->files->next)
+		dup2(heredoc_pipe[0], STDIN_FILENO);
+	close_heredoc_pipe(heredoc_pipe[0]);
 }
