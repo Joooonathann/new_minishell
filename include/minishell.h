@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/20 04:02:35 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 07:08:43 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ typedef struct s_tokens
 	char			pipe;
 }					t_tokens;
 
+typedef struct s_file
+{
+	char			*name;
+	char			*type;
+	struct s_file	*next;
+}					t_file;
+
 typedef struct s_vars
 {
 	char			*key;
@@ -82,6 +89,7 @@ typedef struct s_minishell
 	t_tokens		*tokens;
 	t_tokens		**tokens_split;
 	t_tokens		*current_tokens;
+	t_file			*files;
 }					t_minishell;
 
 typedef struct s_lst_cmd

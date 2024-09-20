@@ -37,6 +37,7 @@ t_minishell	*init_data(char **envp, t_minishell *data)
 		data->tokens_split = split_tokens(data->tokens);
 	else
 		data->tokens_split = NULL;
+	data->files = NULL;
 	data->current_tokens = NULL;
 	return (data);
 }
