@@ -2,6 +2,17 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+int	exist_vars_masked(t_vars *vars, char *key)
+{
+	while (vars)
+	{
+		if (ft_strcmp(vars->value, key) && vars->hide)
+			return (1);
+		vars = vars->next;
+	}
+	return (0);
+}
+
 void	cd_command(t_minishell **data)
 {
 	char		*path;
@@ -60,6 +71,26 @@ void	cd_command(t_minishell **data)
 		update_vars(&(*data)->env, "?", "1");
 		free(path);
 		return ;
+	}
+	if (!exist_vars_masked((*data)->env, "OLDPWD"))
+	{
+		t_vars	*new;
+		new = malloc(sizeof(t_vars));
+		new->key = "OLDPWD";
+		new->value = NULL;
+		new->hide = TRUE;
+		new->next = NULL;
+		add_vars(new, &(*data)->env);
+	}
+	if (!exist_vars_masked((*data)->env, "PWD"))
+	{
+		t_vars	*new;
+		new = malloc(sizeof(t_vars));
+		new->key = "PWD";
+		new->value = NULL;
+		new->hide = TRUE;
+		new->next = NULL;
+		add_vars(new, &(*data)->env);
 	}
 	update_vars(&(*data)->env, "OLDPWD", get_vars(&(*data)->env, "PWD")->value);
 	current_pwd = getcwd(NULL, 0);

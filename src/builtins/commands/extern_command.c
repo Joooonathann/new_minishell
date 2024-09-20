@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 18:01:41 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 23:07:15 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 04:12:55 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static int	get_count_vars(t_vars *env)
 	i = 0;
 	while (env)
 	{
-		i++;
+		if (!env->hide)
+			i++;
 		env = env->next;
 	}
 	return (i);
@@ -36,14 +37,17 @@ static char	**get_env(t_vars *env)
 	i = 0;
 	while (env)
 	{
-		result[i] = malloc(sizeof(char) * (ft_strlen(env->key)
-					+ ft_strlen(env->value) + 2));
-		if (!result[i])
-			return (NULL);
-		ft_strcpy(result[i], env->key);
-		ft_strcat(result[i], "=");
-		ft_strcat(result[i], env->value);
-		i++;
+		if (!env->hide)
+		{
+			result[i] = malloc(sizeof(char) * (ft_strlen(env->key)
+						+ ft_strlen(env->value) + 2));
+			if (!result[i])
+				return (NULL);
+			ft_strcpy(result[i], env->key);
+			ft_strcat(result[i], "=");
+			ft_strcat(result[i], env->value);
+			i++;
+		}
 		env = env->next;
 	}
 	result[i] = NULL;
@@ -118,14 +122,16 @@ void	extern_command(t_minishell **data)
 	envp = get_env((*data)->env);
 	if (!command_path)
 	{
-		fprintf(stderr, "%s: command not found\n", (*data)->current_tokens->value);
+		fprintf(stderr, "%s: command not found\n",
+			(*data)->current_tokens->value);
 		exit(127);
 	}
 	if (lstat(command_path, &file_stat) == 0)
 	{
 		if (S_ISDIR(file_stat.st_mode))
 		{
-			fprintf(stderr, "%s: Is a directory\n", (*data)->current_tokens->value);
+			fprintf(stderr, "%s: Is a directory\n",
+				(*data)->current_tokens->value);
 			exit(126);
 		}
 	}

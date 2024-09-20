@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 03:58:23 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 04:05:35 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 04:18:43 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	unset_command(t_minishell **data)
 	while (token)
 	{
 		var_to_remove = get_vars(&(*data)->env, token->value);
-		if (var_to_remove)
+		if (var_to_remove && !var_to_remove->hide)
 			delete_vars(&(*data)->env, var_to_remove);
 		token = token->next;
 	}
