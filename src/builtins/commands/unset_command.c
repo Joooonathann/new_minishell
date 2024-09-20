@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_command.c                                      :+:      :+:    :+:   */
+/*   unset_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/19 17:49:08 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 02:20:19 by jalbiser         ###   ########.fr       */
+/*   Created: 2024/09/20 03:58:23 by jalbiser          #+#    #+#             */
+/*   Updated: 2024/09/20 04:05:35 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env_command(t_minishell **data)
+void	unset_command(t_minishell **data)
 {
-	t_vars	*env;
+	t_tokens	*token;
+	t_vars		*var_to_remove;
 
-	env = (*data)->env;
-	while (env)
+	token = (*data)->current_tokens;
+	if (ft_count_tokens(token) < 2)
 	{
-		if (!env->hide && env->value)
-			printf("%s=%s\n", env->key, env->value);
-		env = env->next;
+		update_vars(&(*data)->env, "?", "0");
+		return ;
 	}
-	exit(0);
+	token = token->next;
+	while (token)
+	{
+		var_to_remove = get_vars(&(*data)->env, token->value);
+		if (var_to_remove)
+			delete_vars(&(*data)->env, var_to_remove);
+		token = token->next;
+	}
+	update_vars(&(*data)->env, "?", "0");
 }

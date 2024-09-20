@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 15:46:17 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 23:05:37 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 04:01:44 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_lstcmd	*init_commands(void)
 {
 	t_lstcmd	*commands;
 
-	commands = (t_lstcmd *)malloc(4 * sizeof(t_lstcmd));
+	commands = (t_lstcmd *)malloc(8 * sizeof(t_lstcmd));
 	if (!commands)
 		return (NULL);
 	commands[0].name = "echo";
@@ -25,8 +25,16 @@ t_lstcmd	*init_commands(void)
 	commands[1].func = env_command;
 	commands[2].name = "pwd";
 	commands[2].func = pwd_command;
-	commands[3].name = NULL;
-	commands[3].func = NULL;
+	commands[3].name = "exit";
+	commands[3].func = exit_command;
+	commands[4].name = "export";
+	commands[4].func = export_command;
+	commands[5].name = "cd";
+	commands[5].func = cd_command;
+	commands[6].name = "unset";
+	commands[6].func = unset_command;
+	commands[7].name = NULL;
+	commands[7].func = NULL;
 	return (commands);
 }
 

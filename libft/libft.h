@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 11:00:21 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/19 00:39:00 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 01:30:44 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
+int					ft_strcmp_tr(const char *s1, const char *s2);
 char				*ft_strndup_range(const char *s, size_t start, size_t end);
 char				*ft_strcat(char *dst, const char *src);
 int					ft_isalpha(int c);

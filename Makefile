@@ -6,7 +6,7 @@
 #    By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 11:55:17 by jalbiser          #+#    #+#              #
-#    Updated: 2024/09/19 22:24:38 by jalbiser         ###   ########.fr        #
+#    Updated: 2024/09/20 04:02:45 by jalbiser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,10 +37,15 @@ SRC			=	./src/minishell.c\
 				./src/parsing/trime_useless_quotes.c\
 				./src/vars/init_vars.c\
 				./src/vars/get_vars.c\
+				./src/vars/delete_vars.c\
 				./src/builtins/commands/echo_command.c\
 				./src/builtins/commands/env_command.c\
 				./src/builtins/commands/extern_command.c\
 				./src/builtins/commands/pwd_command.c\
+				./src/builtins/commands/exit_command.c\
+				./src/builtins/commands/export_command.c\
+				./src/builtins/commands/cd_command.c\
+				./src/builtins/commands/unset_command.c\
 				./src/builtins/handler_builtins.c\
 				./src/builtins/handler_exec.c
 				

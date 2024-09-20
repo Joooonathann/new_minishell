@@ -6,11 +6,27 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 00:40:42 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/19 22:36:45 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/20 01:15:47 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	delete_all_vars(t_vars **vars)
+{
+	t_vars	*vars_tmp;
+
+	while (*vars)
+	{
+		vars_tmp = (*vars)->next;
+		if ((*vars)->key)
+			free((*vars)->key);
+		if ((*vars)->value)
+			free((*vars)->value);
+		free(*vars);
+		*vars = vars_tmp;
+	}
+}
 
 void	update_vars(t_vars **env, char *key, char *value)
 {
