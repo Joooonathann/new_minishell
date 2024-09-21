@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 00:18:11 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 19:32:47 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/21 16:21:10 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,19 @@ void	exit_command(t_minishell **data)
 		exit_and_clean(data, 0);
 	else if (!is_numeric_argument((*data)->current_tokens->next->value))
 	{
-		fprintf(stderr, "bash: exit: %s: numeric argument required\n",
-			(*data)->current_tokens->next->value);
+		ft_error(3, "bash: exit:", (*data)->current_tokens->next->value,
+			": numeric argument required");
 		exit_and_clean(data, 2);
 	}
 	else if (ft_count_tokens((*data)->current_tokens) > 2)
 	{
-		fprintf(stderr, "bash: exit: too many arguments\n");
+		ft_error(1, "bash: exit: too many arguments");
 		exit_and_clean(data, 1);
 	}
 	else if (ft_atoi((*data)->current_tokens->next->value) > 2147483647)
 	{
-		fprintf(stderr, "bash: exit: %s: numeric argument required\n",
-			(*data)->current_tokens->next->value);
+		ft_error(3, "bash: exit:", (*data)->current_tokens->next->value,
+			": numeric argument required");
 		exit_and_clean(data, 2);
 	}
 	else

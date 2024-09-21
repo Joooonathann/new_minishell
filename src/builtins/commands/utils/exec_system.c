@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:25:43 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 20:56:42 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/21 16:20:31 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static void	handle_input_redirection(t_minishell **data)
 	}
 	if (!S_ISREG(file_stat.st_mode))
 	{
-		fprintf(stderr, "Error: %s is not a regular file\n",
-			(*data)->files->name);
+		ft_error(3, "Error:", (*data)->files->name, " is not a regular file");
 		exit(EXIT_FAILURE);
 	}
 	fd = open((*data)->files->name, O_RDONLY);
