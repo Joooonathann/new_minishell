@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/21 19:35:51 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 00:47:11 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@ char	*create_prompt(t_vars *env)
 		hostname = buffer;
 	else
 		hostname = "42";
-	if (get_vars(&env, "HOME") && ft_strncmp(get_vars(&env, "PWD")->value, get_vars(&env,
-				"HOME")->value, ft_strlen(get_vars(&env, "HOME")->value)) == 0)
-		display_path = ft_strjoin("~", get_vars(&env, "PWD")->value + ft_strlen(get_vars(&env,
-						"HOME")->value));
+	if (get_vars(&env, "HOME") && ft_strncmp(get_vars(&env, "PWD")->value,
+			get_vars(&env, "HOME")->value, ft_strlen(get_vars(&env,
+					"HOME")->value)) == 0)
+		display_path = ft_strjoin("~", get_vars(&env, "PWD")->value
+				+ ft_strlen(get_vars(&env, "HOME")->value));
 	else
 		display_path = ft_strdup(get_vars(&env, "PWD")->value);
 	prompt = ft_strjoin_three(get_vars(&env, "USER")->value, "@", hostname);

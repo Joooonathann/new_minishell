@@ -6,17 +6,18 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:25:43 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/21 16:20:31 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 00:44:37 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_input_redirection(t_minishell **data)
+static void	handle_input_redirection(t_minishell **data, int *a)
 {
 	struct stat	file_stat;
 	int			fd;
 
+	*a = 1;
 	if (lstat((*data)->files->name, &file_stat) == -1)
 	{
 		perror("File does not exist");
@@ -37,21 +38,23 @@ static void	handle_input_redirection(t_minishell **data)
 	close(fd);
 }
 
-static void	handle_output_redirection(t_minishell **data, int flags)
+static void	handle_output_redirection(t_minishell **data, int flags, int *z)
 {
 	int	fd;
 
+	*z = 1;
 	fd = open((*data)->files->name, flags, 0644);
 	if (fd < 0)
 	{
 		perror("Error opening file");
 		exit(EXIT_FAILURE);
 	}
-	dup2(fd, STDOUT_FILENO);
+	if (!(*data)->files->next)
+		dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
 
-void	fetch_redirection(t_minishell **data, t_tokens *tokens)
+void	fetch_redirection(t_minishell **data, t_tokens *tokens, int *z, int *a)
 {
 	t_file	*current;
 
@@ -67,11 +70,11 @@ void	fetch_redirection(t_minishell **data, t_tokens *tokens)
 	while ((*data)->files)
 	{
 		if (ft_strcmp((*data)->files->type, "<"))
-			handle_input_redirection(data);
+			handle_input_redirection(data, a);
 		else if (ft_strcmp((*data)->files->type, ">"))
-			handle_output_redirection(data, O_WRONLY | O_CREAT | O_TRUNC);
+			handle_output_redirection(data, O_WRONLY | O_CREAT | O_TRUNC, z);
 		else if (ft_strcmp((*data)->files->type, ">>"))
-			handle_output_redirection(data, O_WRONLY | O_CREAT | O_APPEND);
+			handle_output_redirection(data, O_WRONLY | O_CREAT | O_APPEND, z);
 		(*data)->files = (*data)->files->next;
 	}
 }
