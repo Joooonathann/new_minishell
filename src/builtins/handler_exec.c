@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 02:09:36 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 00:43:59 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:30:12 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,20 @@
 
 static void	handle_child(t_minishell **data, int prev_fd, int *pipefd, int i)
 {
-	int	z;
-	int	a;
-
-	a = 0;
-	z = 0;
-	fetch_redirection(data, (*data)->tokens_split[i], &z, &a);
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
 	}
-	if ((*data)->tokens_split[i + 1] && !z)
+	if ((*data)->tokens_split[i + 1]
+		&& !is_on_redirection((*data)->tokens_split[i]))
 		dup2(pipefd[1], STDOUT_FILENO);
-	else if (prev_fd != -1 && !a)
+	else if (prev_fd != -1 && is_on_redirection((*data)->tokens_split[i]) != 2)
 		dup2(prev_fd, STDIN_FILENO);
+	fetch_redirection(data, (*data)->tokens_split[i]);
+	if ((*data)->tokens_split[i + 1]
+		&& is_on_redirection((*data)->tokens_split[i]) == 2)
+		dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
 	handler_builtins(data);

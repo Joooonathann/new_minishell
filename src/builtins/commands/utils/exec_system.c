@@ -6,18 +6,30 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:25:43 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 00:44:37 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:30:58 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_input_redirection(t_minishell **data, int *a)
+int	is_on_redirection(t_tokens *tokens)
+{
+	while (tokens)
+	{
+		if (ft_strcmp(tokens->value, ">") || ft_strcmp(tokens->value, ">>"))
+			return (1);
+		if (ft_strcmp(tokens->value, "<<"))
+			return (2);
+		tokens = tokens->next;
+	}
+	return (0);
+}
+
+static void	handle_input_redirection(t_minishell **data)
 {
 	struct stat	file_stat;
 	int			fd;
 
-	*a = 1;
 	if (lstat((*data)->files->name, &file_stat) == -1)
 	{
 		perror("File does not exist");
@@ -38,11 +50,10 @@ static void	handle_input_redirection(t_minishell **data, int *a)
 	close(fd);
 }
 
-static void	handle_output_redirection(t_minishell **data, int flags, int *z)
+static void	handle_output_redirection(t_minishell **data, int flags)
 {
 	int	fd;
 
-	*z = 1;
 	fd = open((*data)->files->name, flags, 0644);
 	if (fd < 0)
 	{
@@ -54,7 +65,7 @@ static void	handle_output_redirection(t_minishell **data, int flags, int *z)
 	close(fd);
 }
 
-void	fetch_redirection(t_minishell **data, t_tokens *tokens, int *z, int *a)
+void	fetch_redirection(t_minishell **data, t_tokens *tokens)
 {
 	t_file	*current;
 
@@ -70,11 +81,11 @@ void	fetch_redirection(t_minishell **data, t_tokens *tokens, int *z, int *a)
 	while ((*data)->files)
 	{
 		if (ft_strcmp((*data)->files->type, "<"))
-			handle_input_redirection(data, a);
+			handle_input_redirection(data);
 		else if (ft_strcmp((*data)->files->type, ">"))
-			handle_output_redirection(data, O_WRONLY | O_CREAT | O_TRUNC, z);
+			handle_output_redirection(data, O_WRONLY | O_CREAT | O_TRUNC);
 		else if (ft_strcmp((*data)->files->type, ">>"))
-			handle_output_redirection(data, O_WRONLY | O_CREAT | O_APPEND, z);
+			handle_output_redirection(data, O_WRONLY | O_CREAT | O_APPEND);
 		(*data)->files = (*data)->files->next;
 	}
 }
