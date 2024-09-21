@@ -6,20 +6,20 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:12:00 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/16 13:55:04 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:38:12 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	calc_len(char **str, BOOL *in_quote, QUOTE *quote_type, int *len)
+void	calc_len(char **str, t_bool *in_quote, t_quote *quote_type, int *len)
 {
 	if (((**str == SIMPLE && count_quote(*str, SIMPLE) > 1)
 			|| (**str == DOUBLE && count_quote(*str, DOUBLE) > 1))
 		&& !*in_quote)
 	{
 		*in_quote = TRUE;
-		*quote_type = (QUOTE) * *str;
+		*quote_type = (t_quote) * *str;
 	}
 	else if (**str == (char)*quote_type && *in_quote)
 	{
@@ -34,8 +34,8 @@ char	*init_ms_token(char *str, char *delim)
 {
 	char	*token;
 	int		len;
-	BOOL	in_quote;
-	QUOTE	quote_type;
+	t_bool	in_quote;
+	t_quote	quote_type;
 
 	len = 0;
 	in_quote = FALSE;

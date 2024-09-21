@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:33:58 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/16 13:53:49 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:38:02 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*add_char_to_str(char *str, char c)
 }
 
 static int	return_value(t_tokens *token, int i,
-						BOOL in_quote, QUOTE quote_type)
+						t_bool in_quote, t_quote quote_type)
 {
 	return ((token->value[i] == SIMPLE || token->value[i] == DOUBLE)
 		&& (!in_quote || (char)quote_type == token->value[i])
@@ -59,8 +59,8 @@ char	*expand_tokens(t_tokens *token, t_vars **env)
 {
 	char	*expanded_value;
 	int		i;
-	BOOL	in_quote;
-	QUOTE	quote_type;
+	t_bool	in_quote;
+	t_quote	quote_type;
 
 	expanded_value = ft_strdup("");
 	i = 0;

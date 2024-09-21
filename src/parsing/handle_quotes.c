@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:13 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/20 16:53:04 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:38:06 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ char	*ft_strcat_dynamic(char *dest, char *src)
 	return (result);
 }
 
-void	handle_quotes(BOOL *in_quote, QUOTE *quote_type, char c,
+void	handle_quotes(t_bool *in_quote, t_quote *quote_type, char c,
 		char **expanded_value)
 {
 	*in_quote = !(*in_quote);
 	if (*in_quote)
-		*quote_type = (QUOTE)c;
+		*quote_type = (t_quote)c;
 	else
 		*quote_type = 0;
 	*expanded_value = add_char_to_str(*expanded_value, c);

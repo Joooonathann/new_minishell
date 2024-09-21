@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/22 01:31:18 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:38:49 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define BOOL unsigned int
+typedef unsigned int	t_bool;
+typedef unsigned int	t_quote;
+
 # define TRUE 1
 # define FALSE 0
-# define QUOTE unsigned int
 # define SIMPLE 39
 # define DOUBLE 34
 
@@ -54,128 +55,129 @@ typedef enum s_token_type
 	TYPE_REDIRECTION_IN,
 	TYPE_REDIRECTION_OUT,
 	TYPE_PIPE,
-}					t_token_type;
+}						t_token_type;
 
 typedef struct s_tokens
 {
-	struct s_tokens	*next;
-	struct s_tokens	*prev;
-	char			*value;
-	unsigned int	quote;
-	t_token_type	type;
-	char			redirection;
-	char			pipe;
-}					t_tokens;
+	struct s_tokens		*next;
+	struct s_tokens		*prev;
+	char				*value;
+	unsigned int		quote;
+	t_token_type		type;
+	char				redirection;
+	char				pipe;
+}						t_tokens;
 
 typedef struct s_file
 {
-	char			*name;
-	char			*type;
-	struct s_file	*next;
-}					t_file;
+	char				*name;
+	char				*type;
+	struct s_file		*next;
+}						t_file;
 
 typedef struct s_vars
 {
-	char			*key;
-	char			*value;
-	BOOL			hide;
-	struct s_vars	*next;
-}					t_vars;
+	char				*key;
+	char				*value;
+	t_bool				hide;
+	struct s_vars		*next;
+}						t_vars;
 
 typedef struct s_minishell
 {
-	char			*prompt;
-	t_vars			*env;
-	t_tokens		*tokens;
-	t_tokens		**tokens_split;
-	t_tokens		*current_tokens;
-	t_file			*files;
-	char			*prompt_value;
-}					t_minishell;
+	char				*prompt;
+	t_vars				*env;
+	t_tokens			*tokens;
+	t_tokens			**tokens_split;
+	t_tokens			*current_tokens;
+	t_file				*files;
+	char				*prompt_value;
+}						t_minishell;
 
 typedef struct s_lst_cmd
 {
-	char			*name;
-	void			(*func)(t_minishell **data);
-}					t_lstcmd;
+	char				*name;
+	void				(*func)(t_minishell **data);
+}						t_lstcmd;
 
 // Token list
-void				ft_del_token(t_tokens **token, t_tokens **tokens);
-void				ft_free_tokens(t_tokens **tokens);
-void				ft_tokenadd_back(t_tokens **tokens, t_tokens *new);
-t_tokens			*ft_tokenlast(t_tokens *tokens);
-t_tokens			*ft_tokennew(char *value);
-int					ft_count_tokens(t_tokens *tokens);
-int					ft_count_value_tokens(t_tokens *tokens);
-t_tokens			**split_tokens(t_tokens *tokens);
-void				ft_free_tokens_split(t_tokens **tokens);
+void					ft_del_token(t_tokens **token, t_tokens **tokens);
+void					ft_free_tokens(t_tokens **tokens);
+void					ft_tokenadd_back(t_tokens **tokens, t_tokens *new);
+t_tokens				*ft_tokenlast(t_tokens *tokens);
+t_tokens				*ft_tokennew(char *value);
+int						ft_count_tokens(t_tokens *tokens);
+int						ft_count_value_tokens(t_tokens *tokens);
+t_tokens				**split_tokens(t_tokens *tokens);
+void					ft_free_tokens_split(t_tokens **tokens);
 
 //	PARSING
-int					count_quote(char *str, QUOTE quote_type);
-char				*init_ms_token(char *str, char *delim);
-t_tokens			*parser(char *str, t_vars **env);
-void				tokenizer(char **str, t_tokens **tokens);
-void				env_var_expansion(t_tokens **tokens, t_vars **env);
-char				*add_char_to_str(char *str, char c);
-void				handle_quotes(BOOL *in_quote, QUOTE *quote_type, char c,
-						char **expanded_value);
-void				handle_env_vars(t_tokens *token, int *i, t_vars **env,
-						char **expanded_value);
-void				handle_special_vars(int *i, char **expanded_value,
-						t_vars **env);
-void				add_token_type(t_tokens **tokens);
-void				trime_useless_quotes(t_tokens **tokens);
-char				*add_char_to_str(char *str, char c);
-char				*ft_strcat_dynamic(char *dest, char *src);
-void				ft_error(int count, ...);
+int						count_quote(char *str, t_quote quote_type);
+char					*init_ms_token(char *str, char *delim);
+t_tokens				*parser(char *str, t_vars **env);
+void					tokenizer(char **str, t_tokens **tokens);
+void					env_var_expansion(t_tokens **tokens, t_vars **env);
+char					*add_char_to_str(char *str, char c);
+void					handle_quotes(t_bool *in_quote, t_quote *quote_type,
+							char c, char **expanded_value);
+void					handle_env_vars(t_tokens *token, int *i, t_vars **env,
+							char **expanded_value);
+void					handle_special_vars(int *i, char **expanded_value,
+							t_vars **env);
+void					add_token_type(t_tokens **tokens);
+void					trime_useless_quotes(t_tokens **tokens);
+char					*add_char_to_str(char *str, char c);
+char					*ft_strcat_dynamic(char *dest, char *src);
+void					ft_error(int count, ...);
 
 // VARS - NEW
-t_vars				*init_vars(char **envp);
-void				add_vars(t_vars *new, t_vars **vars);
-t_vars				*get_vars(t_vars **env, char *key);
-void				env_command(t_minishell **data);
-void				extern_command(t_minishell **data);
-void				update_vars(t_vars **env, char *key, char *value);
-void				delete_all_vars(t_vars **vars);
-int					delete_vars(t_vars **env, t_vars *delete);
+t_vars					*init_vars(char **envp);
+void					add_vars(t_vars *new, t_vars **vars);
+t_vars					*get_vars(t_vars **env, char *key);
+void					env_command(t_minishell **data);
+void					extern_command(t_minishell **data);
+void					update_vars(t_vars **env, char *key, char *value);
+void					delete_all_vars(t_vars **vars);
+int						delete_vars(t_vars **env, t_vars *delete);
 
 // BUILTINS / COMMANDS - NEW
-void				handler_exec(t_minishell **data);
-void				handler_builtins(t_minishell **data);
-void				echo_command(t_minishell **data);
-void				pwd_command(t_minishell **data);
-void				exit_command(t_minishell **data);
-void				export_command(t_minishell **data);
-void				cd_command(t_minishell **data);
-void				unset_command(t_minishell **data);
+void					handler_exec(t_minishell **data);
+void					handler_builtins(t_minishell **data);
+void					echo_command(t_minishell **data);
+void					pwd_command(t_minishell **data);
+void					exit_command(t_minishell **data);
+void					export_command(t_minishell **data);
+void					cd_command(t_minishell **data);
+void					unset_command(t_minishell **data);
 
 // UTILS
-void				insert_sorted(t_vars **sorted, t_vars *new);
-t_vars				*sort_vars(t_vars *vars);
-t_vars				*dup_env(t_vars *vars);
-void				print_env(t_vars *vars);
-int					calculate_size_export(char *str, BOOL add);
-int					handle_home_path(t_minishell **data, char **path,
-						t_tokens *token);
-void				handle_tilde(t_minishell **data, char **path);
-void				handle_chdir_error(char *path, t_minishell **data);
-int					get_count_vars(t_vars *env);
-char				**get_env(t_vars *env);
-char				*build_full_path(char *dir, char *cmd);
-void				fetch_redirection(t_minishell **data, t_tokens *tokens);
-t_file				*get_files(t_tokens *tokens);
-t_file				*new_file(char *value, char *type);
-void				add_file(t_file **tokens, t_file *new);
-int					is_redirection(char *value);
-t_tokens			*get_tokens_new(t_tokens *tokens);
-int					count_tokens_split(t_tokens **tokens);
-int					nofork_command(t_tokens *tokens);
-void				clean_process(t_minishell **data, BOOL env);
-void				up_shlvl(t_vars **env);
-void				write_to_heredoc_pipe(int fd, const char *line);
-void				close_heredoc_pipe(int fd);
-void				read_heredoc_lines(t_minishell **data, int heredoc_pipe);
-void				handle_heredoc(t_minishell **data);
-int					is_on_redirection(t_tokens *tokens);
+void					insert_sorted(t_vars **sorted, t_vars *new);
+t_vars					*sort_vars(t_vars *vars);
+t_vars					*dup_env(t_vars *vars);
+void					print_env(t_vars *vars);
+int						calculate_size_export(char *str, t_bool add);
+int						handle_home_path(t_minishell **data, char **path,
+							t_tokens *token);
+void					handle_tilde(t_minishell **data, char **path);
+void					handle_chdir_error(char *path, t_minishell **data);
+int						get_count_vars(t_vars *env);
+char					**get_env(t_vars *env);
+char					*build_full_path(char *dir, char *cmd);
+void					fetch_redirection(t_minishell **data, t_tokens *tokens);
+t_file					*get_files(t_tokens *tokens);
+t_file					*new_file(char *value, char *type);
+void					add_file(t_file **tokens, t_file *new);
+int						is_redirection(char *value);
+t_tokens				*get_tokens_new(t_tokens *tokens);
+int						count_tokens_split(t_tokens **tokens);
+int						nofork_command(t_tokens *tokens);
+void					clean_process(t_minishell **data, t_bool env);
+void					up_shlvl(t_vars **env);
+void					write_to_heredoc_pipe(int fd, const char *line);
+void					close_heredoc_pipe(int fd);
+void					read_heredoc_lines(t_minishell **data,
+							int heredoc_pipe);
+void					handle_heredoc(t_minishell **data);
+int						is_on_redirection(t_tokens *tokens);
 
 #endif

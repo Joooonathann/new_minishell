@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trime_useless_quotes.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekrause <emeric.yukii@gmail.com>           +#+  +:+       +#+        */
+/*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:33:40 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/16 16:19:37 by ekrause          ###   ########.fr       */
+/*   Updated: 2024/09/22 01:38:31 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	get_new_len(t_tokens *tokens)
 {
 	int		len;
 	int		i;
-	BOOL	in_quote;
-	QUOTE	quote_type;
+	t_bool	in_quote;
+	t_quote	quote_type;
 
 	len = 0;
 	i = 0;
@@ -56,8 +56,8 @@ char	*init_new_value(t_tokens *tokens)
 
 void	create_new_token_without_quotes(t_tokens *token, char **new_value)
 {
-	BOOL	in_quote;
-	QUOTE	quote_type;
+	t_bool	in_quote;
+	t_quote	quote_type;
 	int		i;
 	int		j;
 

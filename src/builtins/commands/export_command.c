@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:29:22 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:01:25 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:36:47 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	is_valid_splited(char *str)
 	return (1);
 }
 
-static void	handle_value_append(char *str, t_vars *new, t_vars *tmp, BOOL add)
+static void	handle_value_append(char *str, t_vars *new, t_vars *tmp, t_bool add)
 {
 	char	*new_value;
 	int		value_start;
@@ -53,7 +53,7 @@ static void	handle_value_append(char *str, t_vars *new, t_vars *tmp, BOOL add)
 				ft_strlen(str));
 }
 
-static void	handle_value_set(char *str, t_vars *new, BOOL add)
+static void	handle_value_set(char *str, t_vars *new, t_bool add)
 {
 	if (calculate_size_export(str, add) == (int)ft_strlen(str))
 		new->value = NULL;
@@ -62,7 +62,7 @@ static void	handle_value_set(char *str, t_vars *new, BOOL add)
 				ft_strlen(str));
 }
 
-void	add_vars_export(char *str, t_minishell **data, BOOL add)
+void	add_vars_export(char *str, t_minishell **data, t_bool add)
 {
 	t_vars	*new;
 	t_vars	*tmp;

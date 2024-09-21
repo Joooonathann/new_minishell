@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 15:59:10 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:10:45 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:37:01 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	print_env(t_vars *vars)
 	delete_all_vars(&sorted_vars);
 }
 
-int	calculate_size_export(char *str, BOOL add)
+int	calculate_size_export(char *str, t_bool add)
 {
 	int	i;
 

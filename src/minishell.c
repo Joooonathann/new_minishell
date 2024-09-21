@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 01:31:46 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:36:28 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_minishell	*init_data(char **envp, t_minishell *data)
 	return (data);
 }
 
-void	clean_process(t_minishell **data, BOOL env)
+void	clean_process(t_minishell **data, t_bool env)
 {
 	if ((*data)->tokens)
 		ft_free_tokens(&(*data)->tokens);

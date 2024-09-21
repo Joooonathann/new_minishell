@@ -6,13 +6,13 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 16:50:34 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/16 13:54:13 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 01:38:24 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_quote(char *str, QUOTE quote_type)
+int	count_quote(char *str, t_quote quote_type)
 {
 	int	i;
 	int	j;
@@ -53,14 +53,14 @@ char	*create_delim_token(char **str, char **token)
 	}
 }
 
-void	copy_in_token(char **str, BOOL *in_quote, QUOTE *quote_type)
+void	copy_in_token(char **str, t_bool *in_quote, t_quote *quote_type)
 {
 	if (((**str == SIMPLE && count_quote(*str, SIMPLE) > 1)
 			|| (**str == DOUBLE && count_quote(*str, DOUBLE) > 1))
 		&& !*in_quote)
 	{
 		*in_quote = TRUE;
-		*quote_type = (QUOTE) **str;
+		*quote_type = (t_quote) **str;
 	}
 	else if (**str == (char)*quote_type && *in_quote)
 	{
@@ -73,8 +73,8 @@ char	*ms_strtok(char **str, char *delim)
 {
 	char	*token;
 	int		i;
-	BOOL	in_quote;
-	QUOTE	quote_type;
+	t_bool	in_quote;
+	t_quote	quote_type;
 
 	i = 0;
 	in_quote = FALSE;
