@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 00:18:11 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/21 16:21:10 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/21 16:44:26 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	is_numeric_argument(const char *str)
 		return (0);
 	while (*str)
 	{
-		if (!isdigit(*str))
+		if (!ft_isdigit(*str))
 			return (0);
 		str++;
 	}
