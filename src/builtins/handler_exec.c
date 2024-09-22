@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 02:09:36 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 05:20:11 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 05:20:56 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static void	handle_child(t_minishell **data, int prev_fd, int *pipefd, int i)
 		close(pipefd[1]);
 	}
 	fetch_redirection(data, (*data)->tokens_split[i]);
-	if ((*data)->tokens_split[i + 1] && is_on_redirection((*data)->tokens_split[i]) == 2)
+	if ((*data)->tokens_split[i + 1]
+		&& is_on_redirection((*data)->tokens_split[i]) == 2)
 		dup2(pipefd[1], STDOUT_FILENO);
 	handler_builtins(data);
 	exit(EXIT_SUCCESS);
