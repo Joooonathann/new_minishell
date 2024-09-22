@@ -6,7 +6,7 @@
 #    By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 11:55:17 by jalbiser          #+#    #+#              #
-#    Updated: 2024/09/20 19:27:19 by jalbiser         ###   ########.fr        #
+#    Updated: 2024/09/22 02:53:37 by jalbiser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,8 @@ SRC			=	./src/minishell.c\
 				./src/builtins/commands/export_command.c\
 				./src/builtins/commands/cd_command.c\
 				./src/builtins/commands/unset_command.c\
+				./src/builtins/commands/utils/expand_var_heredoc.c\
+				./src/builtins/commands/utils/compose_tokens.c\
 				./src/builtins/commands/utils/utils_export.c\
 				./src/builtins/commands/utils/utils_cd.c\
 				./src/builtins/commands/utils/utils_extern.c\

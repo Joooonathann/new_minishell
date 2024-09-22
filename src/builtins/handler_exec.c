@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 02:09:36 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 01:30:12 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:53:55 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void	handler_exec(t_minishell **data)
 
 	i = 0;
 	prev_fd = -1;
+	if (ft_strncmp((*data)->prompt, "$", 1) == 0)
+		reparse(data);
 	while ((*data)->tokens_split[i])
 	{
 		(*data)->current_tokens = get_tokens_new((*data)->tokens_split[i]);

@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/22 02:00:22 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:54:11 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ void					delete_all_vars(t_vars **vars);
 int						delete_vars(t_vars **env, t_vars *delete);
 int						exist_masked(t_vars *env, char *key);
 int						exist_vars(t_vars *env, char *key);
+void					expand_var_heredoc(char **str, t_vars **env);
 
 // BUILTINS / COMMANDS - NEW
 void					handler_exec(t_minishell **data);
@@ -181,5 +182,7 @@ void					read_heredoc_lines(t_minishell **data,
 							int heredoc_pipe);
 void					handle_heredoc(t_minishell **data);
 int						is_on_redirection(t_tokens *tokens);
+char					*compose_tokens(t_tokens *tokens);
+void					reparse(t_minishell **data);
 
 #endif

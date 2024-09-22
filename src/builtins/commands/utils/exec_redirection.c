@@ -6,11 +6,32 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:29:18 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/21 15:55:06 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:54:04 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	reparse(t_minishell **data)
+{
+	char	*prompt;
+
+	prompt = ft_strdup(compose_tokens((*data)->tokens));
+	clean_process(data, FALSE);
+	(*data)->prompt = ft_strdup(prompt);
+	(*data)->prompt_value = ft_strdup("");
+	free(prompt);
+	if ((*data)->prompt)
+		(*data)->tokens = parser((*data)->prompt, &(*data)->env);
+	else
+		(*data)->tokens = NULL;
+	if ((*data)->tokens)
+		(*data)->tokens_split = split_tokens((*data)->tokens);
+	else
+		(*data)->tokens_split = NULL;
+	(*data)->files = NULL;
+	(*data)->current_tokens = NULL;
+}
 
 void	write_to_heredoc_pipe(int fd, const char *line)
 {
@@ -30,6 +51,7 @@ void	read_heredoc_lines(t_minishell **data, int heredoc_pipe)
 	while (1)
 	{
 		line = readline("> ");
+		expand_var_heredoc(&line, &(*data)->env);
 		if (!line)
 		{
 			close_heredoc_pipe(heredoc_pipe);

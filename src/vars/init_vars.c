@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 00:07:39 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 02:02:43 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:33:28 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	calculate_size(char *str)
 	return (i);
 }
 
-static int	exist_all_vars(t_vars *vars, char *key)
+int	exist_all_vars(t_vars *vars, char *key)
 {
 	while (vars)
 	{
