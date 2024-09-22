@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:29:18 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 05:19:04 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 18:13:32 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ void	handle_heredoc(t_minishell **data)
 	}
 	read_heredoc_lines(data, heredoc_pipe[1]);
 	close_heredoc_pipe(heredoc_pipe[1]);
-	if (!(*data)->files->next)
+	if (is_last_heredoc(data))
+	{
+		(*data)->input_redirected = 1;
 		dup2(heredoc_pipe[0], STDIN_FILENO);
+	}
 	close_heredoc_pipe(heredoc_pipe[0]);
 }

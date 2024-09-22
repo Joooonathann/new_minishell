@@ -6,11 +6,28 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 02:52:21 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 02:53:19 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 18:13:44 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_last_heredoc(t_minishell **data)
+{
+	t_file	*tmp;
+
+	tmp = (*data)->files;
+	if (!tmp->next)
+		return (1);
+	tmp = tmp->next;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->type, "<<"))
+			return (0);
+		tmp = tmp->next;
+	}
+	return (1);
+}
 
 static int	calculate_total_length(t_tokens *tokens)
 {

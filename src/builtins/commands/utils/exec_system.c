@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:25:43 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 04:52:22 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 17:58:23 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static void	handle_input_redirection(t_minishell **data)
 		perror("Error opening file for reading");
 		exit(EXIT_FAILURE);
 	}
+	(*data)->input_redirected = 1;
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 }
@@ -60,9 +61,23 @@ static void	handle_output_redirection(t_minishell **data, int flags)
 		perror("Error opening file");
 		exit(EXIT_FAILURE);
 	}
-	if (!(*data)->files->next)
-		dup2(fd, STDOUT_FILENO);
+	(*data)->output_redirected = 1;
+	dup2(fd, STDOUT_FILENO);
 	close(fd);
+}
+
+void	free_files(t_file **files)
+{
+	t_file	*tmp;
+
+	while (*files)
+	{
+		tmp = *files;
+		*files = (*files)->next;
+		free(tmp->name);
+		free(tmp->type);
+		free(tmp);
+	}
 }
 
 void	fetch_redirection(t_minishell **data, t_tokens *tokens)
@@ -88,4 +103,5 @@ void	fetch_redirection(t_minishell **data, t_tokens *tokens)
 			handle_output_redirection(data, O_WRONLY | O_CREAT | O_APPEND);
 		(*data)->files = (*data)->files->next;
 	}
+	free_files(&current);
 }

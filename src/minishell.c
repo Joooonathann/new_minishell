@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 03:39:20 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 16:41:52 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ t_minishell	*init_data(char **envp, t_minishell *data)
 		data->tokens_split = split_tokens(data->tokens);
 	else
 		data->tokens_split = NULL;
+	data->input_redirected = 0;
+	data->output_redirected = 0;
 	data->files = NULL;
 	data->current_tokens = NULL;
 	return (data);
