@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/22 01:38:49 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:00:22 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,8 @@ void					extern_command(t_minishell **data);
 void					update_vars(t_vars **env, char *key, char *value);
 void					delete_all_vars(t_vars **vars);
 int						delete_vars(t_vars **env, t_vars *delete);
+int						exist_masked(t_vars *env, char *key);
+int						exist_vars(t_vars *env, char *key);
 
 // BUILTINS / COMMANDS - NEW
 void					handler_exec(t_minishell **data);

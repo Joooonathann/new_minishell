@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 00:07:39 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 19:36:30 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:02:43 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	calculate_size(char *str)
 	return (i);
 }
 
-int	exist_vars(t_vars *vars, char *key)
+static int	exist_all_vars(t_vars *vars, char *key)
 {
 	while (vars)
 	{
@@ -50,7 +50,7 @@ static void	process_add(char *str, t_vars **vars)
 		return ;
 	new->hide = FALSE;
 	new->next = NULL;
-	if (!exist_vars(*vars, new->key))
+	if (!exist_all_vars(*vars, new->key))
 		add_vars(new, vars);
 	else
 	{
@@ -75,7 +75,7 @@ void	init_hidden(t_vars **vars)
 		return ;
 	new->hide = TRUE;
 	new->next = NULL;
-	if (!exist_vars(*vars, new->key))
+	if (!exist_all_vars(*vars, new->key))
 		add_vars(new, vars);
 	else
 	{

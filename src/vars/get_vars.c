@@ -6,11 +6,33 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 00:40:42 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:19:21 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 02:01:17 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	exist_masked(t_vars *env, char *key)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) && env->hide)
+			return (1);
+		env = env->next;
+	}
+	return (0);
+}
+
+int	exist_vars(t_vars *env, char *key)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) && !env->hide)
+			return (1);
+		env = env->next;
+	}
+	return (0);
+}
 
 void	delete_all_vars(t_vars **vars)
 {
