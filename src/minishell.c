@@ -6,24 +6,11 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 02:33:48 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 03:39:20 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	handler(int signal)
-{
-	if (signal == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	else if (signal == SIGQUIT)
-		return ;
-}
 
 char	*create_prompt(t_vars *env)
 {
@@ -78,6 +65,17 @@ void	clean_process(t_minishell **data, t_bool env)
 		delete_all_vars(&(*data)->env);
 }
 
+void	execute_process(t_minishell **data)
+{
+	if ((*data)->tokens)
+	{
+		signal(SIGINT, SIG_IGN);
+		handler_exec(data);
+		signal(SIGINT, handler_signal);
+		clean_process(data, FALSE);
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*data;
@@ -85,8 +83,8 @@ int	main(int argc, char **argv, char **envp)
 	data = NULL;
 	(void)argv;
 	(void)argc;
-	signal(SIGINT, handler);
-	signal(SIGQUIT, handler);
+	signal(SIGINT, handler_signal);
+	signal(SIGQUIT, handler_signal);
 	while (1)
 	{
 		data = init_data(envp, data);
@@ -98,11 +96,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (*data->prompt)
 			add_history(data->prompt);
-		if (data->tokens)
-		{
-			handler_exec(&data);
-			clean_process(&data, FALSE);
-		}
+		execute_process(&data);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 02:09:36 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 02:53:55 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 04:06:54 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,11 @@ static void	handle_pipe_and_fork(t_minishell **data, int *prev_fd, int i)
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
+	{
+		signal(SIGINT, handler);
+		signal(SIGQUIT, handler);
 		handle_child(data, *prev_fd, pipefd, i);
+	}
 	handle_parent(pipefd, prev_fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:29:18 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 02:54:04 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 04:06:55 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	read_heredoc_lines(t_minishell **data, int heredoc_pipe)
 	while (1)
 	{
 		line = readline("> ");
+		if (!line)
+			break ;
 		expand_var_heredoc(&line, &(*data)->env);
 		if (!line)
 		{

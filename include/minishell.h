@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/22 02:54:11 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 03:40:03 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,5 +184,7 @@ void					handle_heredoc(t_minishell **data);
 int						is_on_redirection(t_tokens *tokens);
 char					*compose_tokens(t_tokens *tokens);
 void					reparse(t_minishell **data);
+void					handler_signal(int signal);
+void					handler(int signal);
 
 #endif
