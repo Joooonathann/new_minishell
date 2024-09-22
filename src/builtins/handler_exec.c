@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 02:09:36 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 04:06:54 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/22 05:20:11 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,23 @@
 
 static void	handle_child(t_minishell **data, int prev_fd, int *pipefd, int i)
 {
-	if (prev_fd != -1)
+	if (is_on_redirection((*data)->tokens_split[i]) != 2)
 	{
-		dup2(prev_fd, STDIN_FILENO);
-		close(prev_fd);
+		if (prev_fd != -1)
+		{
+			dup2(prev_fd, STDIN_FILENO);
+			close(prev_fd);
+		}
+		if ((*data)->tokens_split[i + 1])
+			dup2(pipefd[1], STDOUT_FILENO);
+		else if (prev_fd != -1)
+			dup2(prev_fd, STDIN_FILENO);
+		close(pipefd[0]);
+		close(pipefd[1]);
 	}
-	if ((*data)->tokens_split[i + 1]
-		&& !is_on_redirection((*data)->tokens_split[i]))
-		dup2(pipefd[1], STDOUT_FILENO);
-	else if (prev_fd != -1 && is_on_redirection((*data)->tokens_split[i]) != 2)
-		dup2(prev_fd, STDIN_FILENO);
 	fetch_redirection(data, (*data)->tokens_split[i]);
-	if ((*data)->tokens_split[i + 1]
-		&& is_on_redirection((*data)->tokens_split[i]) == 2)
+	if ((*data)->tokens_split[i + 1] && is_on_redirection((*data)->tokens_split[i]) == 2)
 		dup2(pipefd[1], STDOUT_FILENO);
-	close(pipefd[0]);
-	close(pipefd[1]);
 	handler_builtins(data);
 	exit(EXIT_SUCCESS);
 }
