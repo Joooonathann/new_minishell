@@ -6,11 +6,26 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:00:41 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 22:25:30 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:24:12 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_split_tokens(t_tokens **tokens)
+{
+	int	i;
+
+	i = 0;
+	if (!tokens || !*tokens)
+		return ;
+	while (tokens[i])
+	{
+		free_current(&tokens[i]);
+		i++;
+	}
+	free(tokens);
+}
 
 static int	is_valid_option(const char *str)
 {

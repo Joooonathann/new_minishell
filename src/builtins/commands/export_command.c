@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:29:22 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 22:46:32 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:50:14 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	add_vars_export(char *str, t_minishell **data, t_bool add)
 void	export_command(t_minishell **data)
 {
 	t_tokens	*tmp;
-	
+
 	tmp = (*data)->current_tokens;
 	if (ft_count_tokens(tmp) == 1)
 		print_env((*data)->env);
@@ -95,8 +95,8 @@ void	export_command(t_minishell **data)
 	{
 		if (!is_valid_splited(tmp->value))
 		{
-			ft_error(3, "myfuckingbash: export: '",
-				tmp->value, "': not a valid identifier");
+			ft_error(3, "myfuckingbash: export: '", tmp->value,
+				"': not a valid identifier");
 			update_vars(&(*data)->env, "?", "1");
 			return ;
 		}

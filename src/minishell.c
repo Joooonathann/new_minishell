@@ -6,15 +6,27 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 22:51:54 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:42:31 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+t_minishell	*g_data;
+
+void	handler(int signal)
+{
+	if (signal == SIGINT)
+	{
+		update_vars(&g_data->env, "?", "130");
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (signal == SIGQUIT)
+		return ;
+}
 
 t_minishell	*init_data(char **envp, t_minishell *data)
 {
@@ -57,69 +69,28 @@ void	free_current(t_tokens **tokens)
 	*tokens = NULL;
 }
 
-void	free_split_tokens(t_tokens **tokens)
-{
-	int			i;
-
-	i = 0;
-	if (!tokens || !*tokens)
-		return ;
-	while (tokens[i])
-	{
-		free_current(&tokens[i]);
-		i++;
-	}
-	free(tokens);
-}
-
-void	clean_process(t_minishell **data, t_bool env, t_bool data_free)
-{
-	if ((*data)->tokens)
-		ft_free_tokens(&(*data)->tokens);
-	if ((*data)->current_tokens)
-		free_current(&(*data)->current_tokens);
-	if ((*data)->tokens_split)
-		free_split_tokens((*data)->tokens_split);
-	if ((*data)->prompt)
-		free((*data)->prompt);
-	if ((*data)->env && env)
-		delete_all_vars(&(*data)->env);
-	if (*data && data_free)
-		free(*data);
-}
-
-void	execute_process(t_minishell **data)
-{
-	if ((*data)->tokens)
-	{
-		signal(SIGINT, SIG_IGN);
-		handler_exec(data);
-		signal(SIGINT, handler_signal);
-		clean_process(data, FALSE, FALSE);
-	}
-}
-
 int	main(int argc, char **argv, char **envp)
 {
-	t_minishell	*data;
-
-	data = NULL;
+	g_data = malloc(sizeof(t_minishell));
+	if (!g_data)
+		return (1);
+	g_data->env = init_vars(envp);
 	(void)argv;
 	(void)argc;
-	signal(SIGINT, handler_signal);
+	signal(SIGINT, handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		data = init_data(envp, data);
-		if (!data->prompt)
+		g_data = init_data(envp, g_data);
+		if (!g_data->prompt)
 		{
-			clean_process(&data, TRUE, TRUE);
+			clean_process(&g_data, TRUE, TRUE);
 			printf("exit\n");
 			break ;
 		}
-		if (*data->prompt)
-			add_history(data->prompt);
-		execute_process(&data);
+		if (*g_data->prompt)
+			add_history(g_data->prompt);
+		execute_process(&g_data);
 	}
 	return (0);
 }

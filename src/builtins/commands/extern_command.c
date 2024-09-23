@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 18:01:41 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 22:17:15 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:48:48 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_split(char **split)
 	int	i;
 
 	if (!split)
-		return;
+		return ;
 	i = 0;
 	while (split[i])
 	{
@@ -25,41 +25,6 @@ void	free_split(char **split)
 		i++;
 	}
 	free(split);
-}
-
-static char	*get_path(t_minishell *data)
-{
-	char	**splited_path;
-	char	*full_path;
-	t_vars	*tmp;
-	int		i;
-
-	tmp = get_vars(&data->env, "PATH");
-	if (!tmp)
-		return (NULL);
-	splited_path = ft_split(tmp->value, ':');
-	if (!splited_path)
-		return (NULL);
-	i = 0;
-	while (splited_path[i])
-	{
-		full_path = build_full_path(splited_path[i],
-				data->current_tokens->value);
-		if (!full_path)
-		{	
-			free_split(splited_path);
-			return (NULL);
-		}
-		if (access(full_path, X_OK) == 0)
-		{	
-			free_split(splited_path);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
-	}
-	free_split(splited_path);
-	return (NULL);
 }
 
 static char	**get_args(t_tokens *tokens, char *command_path)
@@ -116,11 +81,11 @@ void	exec_command(char *cmd_path, char **args, char **envp)
 
 void	extern_command(t_minishell **data)
 {
-	char	*command_path;
-	char	**args;
-	char	**envp;
+	char		*command_path;
+	char		**args;
+	char		**envp;
 	t_tokens	*tmp;
-	
+
 	tmp = (*data)->current_tokens;
 	command_path = NULL;
 	if (ft_strchr(tmp->value, '/'))

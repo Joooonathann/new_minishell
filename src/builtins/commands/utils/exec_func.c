@@ -6,22 +6,37 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:38:01 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 03:39:58 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:30:45 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handler(int signal)
+void	clean_process(t_minishell **data, t_bool env, t_bool data_free)
 {
-	if (signal == SIGINT)
+	if ((*data)->tokens)
+		ft_free_tokens(&(*data)->tokens);
+	if ((*data)->current_tokens)
+		free_current(&(*data)->current_tokens);
+	if ((*data)->tokens_split)
+		free_split_tokens((*data)->tokens_split);
+	if ((*data)->prompt)
+		free((*data)->prompt);
+	if ((*data)->env && env)
+		delete_all_vars(&(*data)->env);
+	if (*data && data_free)
+		free(*data);
+}
+
+void	execute_process(t_minishell **data)
+{
+	if ((*data)->tokens)
 	{
-		printf("\n");
-		exit(130);
-		return ;
+		signal(SIGINT, SIG_IGN);
+		handler_exec(data);
+		signal(SIGINT, handler);
+		clean_process(data, FALSE, FALSE);
 	}
-	else if (signal == SIGQUIT)
-		return ;
 }
 
 void	handler_signal(int signal)
@@ -29,9 +44,8 @@ void	handler_signal(int signal)
 	if (signal == SIGINT)
 	{
 		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		exit(130);
+		return ;
 	}
 	else if (signal == SIGQUIT)
 		return ;

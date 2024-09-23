@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 02:09:36 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 22:52:10 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:31:27 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static void	handle_child(t_minishell **data, int prev_fd, int *pipefd, int i)
 		dup2(pipefd[1], STDOUT_FILENO);
 	close(pipefd[0]);
 	close(pipefd[1]);
-	handler_builtins(data);
+	if ((*data)->current_tokens)
+		handler_builtins(data);
 	exit(EXIT_SUCCESS);
 }
 
@@ -64,7 +65,7 @@ static void	handle_pipe_and_fork(t_minishell **data, int *prev_fd, int i)
 		perror("fork");
 	if (pid == 0)
 	{
-		signal(SIGINT, handler);
+		signal(SIGINT, handler_signal);
 		signal(SIGQUIT, SIG_IGN);
 		handle_child(data, *prev_fd, pipefd, i);
 	}

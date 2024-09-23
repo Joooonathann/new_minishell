@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:09:03 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 21:08:51 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:47:59 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,27 @@ void	handle_tilde(t_minishell **data, char **path)
 			free(temp);
 		}
 	}
+}
+
+void	handle_symlink(t_minishell **data, char *path, char *current_pwd)
+{
+	int		q;
+	char	*tmp;
+
+	q = ft_strlen(current_pwd);
+	while (q > 0 && current_pwd[q - 1] != '/')
+		q--;
+	tmp = malloc(sizeof(char) * (q + ft_strlen(path) + 1));
+	if (!tmp)
+	{
+		ft_error(1, "bash: cd: malloc error");
+		free(current_pwd);
+		return ;
+	}
+	ft_strlcpy(tmp, current_pwd, q + 1);
+	ft_strcat(tmp, path);
+	update_vars(&(*data)->env, "PWD", tmp);
+	free(tmp);
 }
 
 void	handle_chdir_error(char *path, t_minishell **data)

@@ -6,32 +6,11 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:05:03 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 22:44:52 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:47:49 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	handle_symlink(t_minishell **data, char *path, char *current_pwd)
-{
-	int		q;
-	char	*tmp;
-
-	q = ft_strlen(current_pwd);
-	while (q > 0 && current_pwd[q - 1] != '/')
-		q--;
-	tmp = malloc(sizeof(char) * (q + ft_strlen(path) + 1));
-	if (!tmp)
-	{
-		ft_error(1, "bash: cd: malloc error");
-		free(current_pwd);
-		return ;
-	}
-	ft_strlcpy(tmp, current_pwd, q + 1);
-	ft_strcat(tmp, path);
-	update_vars(&(*data)->env, "PWD", tmp);
-	free(tmp);
-}
 
 static void	handle_cd_command(t_minishell **data, char *path, struct stat info)
 {
@@ -57,10 +36,9 @@ static void	handle_cd_command(t_minishell **data, char *path, struct stat info)
 		ft_error(1, "bash: cd: getcwd error");
 }
 
-static void	create_copy(t_minishell **data)
+static void	create_pwd_copy(t_minishell **data)
 {
 	t_vars	*new_pwd;
-	t_vars	*new_oldpwd;
 
 	new_pwd = malloc(sizeof(t_vars));
 	if (!new_pwd)
@@ -77,6 +55,12 @@ static void	create_copy(t_minishell **data)
 		free(new_pwd->value);
 		free(new_pwd);
 	}
+}
+
+static void	create_oldpwd_copy(t_minishell **data)
+{
+	t_vars	*new_oldpwd;
+
 	new_oldpwd = malloc(sizeof(t_vars));
 	if (!new_oldpwd)
 		return ;
@@ -84,7 +68,8 @@ static void	create_copy(t_minishell **data)
 	new_oldpwd->value = ft_strdup("");
 	new_oldpwd->hide = TRUE;
 	new_oldpwd->next = NULL;
-	if (!exist_masked((*data)->env, "OLDPWD") && !exist_vars((*data)->env, "OLDPWD"))
+	if (!exist_masked((*data)->env, "OLDPWD") && !exist_vars((*data)->env,
+			"OLDPWD"))
 		add_vars(new_oldpwd, &(*data)->env);
 	else
 	{
@@ -94,6 +79,11 @@ static void	create_copy(t_minishell **data)
 	}
 }
 
+static void	create_copy(t_minishell **data)
+{
+	create_pwd_copy(data);
+	create_oldpwd_copy(data);
+}
 
 void	cd_command(t_minishell **data)
 {

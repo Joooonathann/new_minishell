@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/23 22:37:34 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 00:51:46 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ int						count_tokens_split(t_tokens **tokens);
 int						nofork_command(t_tokens *tokens);
 void					clean_process(t_minishell **data, t_bool env,
 							t_bool data_free);
+void					execute_process(t_minishell **data);
 void					up_shlvl(t_vars **env);
 void					write_to_heredoc_pipe(int fd, const char *line);
 void					close_heredoc_pipe(int fd);
@@ -187,8 +188,13 @@ int						is_on_redirection(t_tokens *tokens);
 char					*compose_tokens(t_tokens *tokens);
 void					reparse(t_minishell **data);
 void					handler_signal(int signal);
-void					handler(int signal);
 int						is_last_heredoc(t_minishell **data);
 void					free_current(t_tokens **tokens);
+void					free_split_tokens(t_tokens **tokens);
+void					handler(int signal);
+void					handle_symlink(t_minishell **data, char *path,
+							char *current_pwd);
+char					*get_path(t_minishell *data);
+void					free_split(char **split);
 
 #endif
