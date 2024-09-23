@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:05:03 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 01:59:34 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:44:52 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,12 @@ static void	create_copy(t_minishell **data)
 	new_pwd->next = NULL;
 	if (!exist_masked((*data)->env, "PWD") && !exist_vars((*data)->env, "PWD"))
 		add_vars(new_pwd, &(*data)->env);
+	else
+	{
+		free(new_pwd->key);
+		free(new_pwd->value);
+		free(new_pwd);
+	}
 	new_oldpwd = malloc(sizeof(t_vars));
 	if (!new_oldpwd)
 		return ;
@@ -78,10 +84,16 @@ static void	create_copy(t_minishell **data)
 	new_oldpwd->value = ft_strdup("");
 	new_oldpwd->hide = TRUE;
 	new_oldpwd->next = NULL;
-	if (!exist_masked((*data)->env, "OLDPWD") && !exist_vars((*data)->env,
-			"OLDPWD"))
+	if (!exist_masked((*data)->env, "OLDPWD") && !exist_vars((*data)->env, "OLDPWD"))
 		add_vars(new_oldpwd, &(*data)->env);
+	else
+	{
+		free(new_oldpwd->key);
+		free(new_oldpwd->value);
+		free(new_oldpwd);
+	}
 }
+
 
 void	cd_command(t_minishell **data)
 {

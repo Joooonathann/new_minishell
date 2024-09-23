@@ -6,11 +6,26 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 18:01:41 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:17:32 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:17:15 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_split(char **split)
+{
+	int	i;
+
+	if (!split)
+		return;
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
 
 static char	*get_path(t_minishell *data)
 {
@@ -31,12 +46,19 @@ static char	*get_path(t_minishell *data)
 		full_path = build_full_path(splited_path[i],
 				data->current_tokens->value);
 		if (!full_path)
+		{	
+			free_split(splited_path);
 			return (NULL);
+		}
 		if (access(full_path, X_OK) == 0)
+		{	
+			free_split(splited_path);
 			return (full_path);
+		}
 		free(full_path);
 		i++;
 	}
+	free_split(splited_path);
 	return (NULL);
 }
 
@@ -97,18 +119,20 @@ void	extern_command(t_minishell **data)
 	char	*command_path;
 	char	**args;
 	char	**envp;
-
+	t_tokens	*tmp;
+	
+	tmp = (*data)->current_tokens;
 	command_path = NULL;
-	if (ft_strchr((*data)->current_tokens->value, '/'))
-		command_path = (*data)->current_tokens->value;
+	if (ft_strchr(tmp->value, '/'))
+		command_path = tmp->value;
 	else
 		command_path = get_path(*data);
 	if (!command_path)
 	{
-		ft_error(2, (*data)->current_tokens->value, ": command not found");
+		ft_error(2, tmp->value, ": command not found");
 		exit(127);
 	}
-	args = get_args((*data)->current_tokens, command_path);
+	args = get_args(tmp, command_path);
 	envp = get_env((*data)->env);
 	handle_command_errors(command_path);
 	exec_command(command_path, args, envp);

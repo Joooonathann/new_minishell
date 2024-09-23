@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/23 12:20:37 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:37:34 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ typedef struct s_minishell
 	t_tokens			**tokens_split;
 	t_tokens			*current_tokens;
 	t_file				*files;
-	char				*prompt_value;
 	int					output_redirected;
 	int					input_redirected;
 }						t_minishell;
@@ -190,5 +189,6 @@ void					reparse(t_minishell **data);
 void					handler_signal(int signal);
 void					handler(int signal);
 int						is_last_heredoc(t_minishell **data);
+void					free_current(t_tokens **tokens);
 
 #endif

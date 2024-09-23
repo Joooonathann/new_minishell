@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:00:41 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 00:00:36 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:25:30 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,25 @@ static int	is_valid_option(const char *str)
 
 void	echo_command(t_minishell **data)
 {
-	int	is_valid;
+	int			is_valid;
+	t_tokens	*tmp;
 
+	tmp = (*data)->current_tokens;
 	is_valid = 0;
-	if ((*data)->current_tokens->next)
+	if (tmp->next)
 	{
-		(*data)->current_tokens = (*data)->current_tokens->next;
-		while (is_valid_option((*data)->current_tokens->value))
+		tmp = tmp->next;
+		while (is_valid_option(tmp->value))
 		{
 			is_valid = 1;
-			(*data)->current_tokens = (*data)->current_tokens->next;
+			tmp = tmp->next;
 		}
-		while ((*data)->current_tokens)
+		while (tmp)
 		{
-			printf("%s", (*data)->current_tokens->value);
-			if ((*data)->current_tokens->next)
+			printf("%s", tmp->value);
+			if (tmp->next)
 				printf(" ");
-			(*data)->current_tokens = (*data)->current_tokens->next;
+			tmp = tmp->next;
 		}
 	}
 	if (!is_valid)

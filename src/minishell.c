@@ -6,26 +6,15 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 12:20:26 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:51:54 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*create_prompt(t_vars *env)
-{
-	char	*hostname;
-	char	*prompt;
-	char	buffer[1024];
-
-	if (gethostname(buffer, sizeof(buffer)) == 0)
-		hostname = buffer;
-	else
-		hostname = "42";
-	prompt = ft_strjoin_three(get_vars(&env, "USER")->value, "@", hostname);
-	prompt = ft_strjoin_free(prompt, "$ ");
-	return (prompt);
-}
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 t_minishell	*init_data(char **envp, t_minishell *data)
 {
@@ -36,8 +25,7 @@ t_minishell	*init_data(char **envp, t_minishell *data)
 			return (NULL);
 		data->env = init_vars(envp);
 	}
-	data->prompt_value = create_prompt(data->env);
-	data->prompt = readline(data->prompt_value);
+	data->prompt = readline("myfuckingbash@42$ ");
 	if (data->prompt)
 		data->tokens = parser(data->prompt, &data->env);
 	else
@@ -53,16 +41,47 @@ t_minishell	*init_data(char **envp, t_minishell *data)
 	return (data);
 }
 
+void	free_current(t_tokens **tokens)
+{
+	t_tokens	*previous_token;
+
+	if (!tokens || !*tokens)
+		return ;
+	while (*tokens)
+	{
+		previous_token = *tokens;
+		*tokens = (*tokens)->next;
+		free(previous_token);
+		previous_token = NULL;
+	}
+	*tokens = NULL;
+}
+
+void	free_split_tokens(t_tokens **tokens)
+{
+	int			i;
+
+	i = 0;
+	if (!tokens || !*tokens)
+		return ;
+	while (tokens[i])
+	{
+		free_current(&tokens[i]);
+		i++;
+	}
+	free(tokens);
+}
+
 void	clean_process(t_minishell **data, t_bool env, t_bool data_free)
 {
 	if ((*data)->tokens)
 		ft_free_tokens(&(*data)->tokens);
+	if ((*data)->current_tokens)
+		free_current(&(*data)->current_tokens);
 	if ((*data)->tokens_split)
-		free((*data)->tokens_split);
+		free_split_tokens((*data)->tokens_split);
 	if ((*data)->prompt)
 		free((*data)->prompt);
-	if ((*data)->prompt_value)
-		free((*data)->prompt_value);
 	if ((*data)->env && env)
 		delete_all_vars(&(*data)->env);
 	if (*data && data_free)
@@ -88,7 +107,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)argc;
 	signal(SIGINT, handler_signal);
-	signal(SIGQUIT, handler_signal);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		data = init_data(envp, data);

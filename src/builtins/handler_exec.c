@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 02:09:36 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 18:13:16 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:52:10 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	handle_pipe_and_fork(t_minishell **data, int *prev_fd, int i)
 	if (pid == 0)
 	{
 		signal(SIGINT, handler);
-		signal(SIGQUIT, handler);
+		signal(SIGQUIT, SIG_IGN);
 		handle_child(data, *prev_fd, pipefd, i);
 	}
 	else
@@ -88,6 +88,7 @@ void	handler_exec(t_minishell **data)
 		reparse(data);
 	while ((*data)->tokens_split[i])
 	{
+		free_current(&(*data)->current_tokens);
 		(*data)->current_tokens = get_tokens_new((*data)->tokens_split[i]);
 		if (count_tokens_split((*data)->tokens_split) == 1
 			&& nofork_command((*data)->tokens))

@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:29:22 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 01:36:47 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 22:46:32 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,22 +85,25 @@ void	add_vars_export(char *str, t_minishell **data, t_bool add)
 
 void	export_command(t_minishell **data)
 {
-	if (ft_count_tokens((*data)->current_tokens) == 1)
+	t_tokens	*tmp;
+	
+	tmp = (*data)->current_tokens;
+	if (ft_count_tokens(tmp) == 1)
 		print_env((*data)->env);
-	(*data)->current_tokens = (*data)->current_tokens->next;
-	while ((*data)->current_tokens)
+	tmp = tmp->next;
+	while (tmp)
 	{
-		if (!is_valid_splited((*data)->current_tokens->value))
+		if (!is_valid_splited(tmp->value))
 		{
 			ft_error(3, "myfuckingbash: export: '",
-				(*data)->current_tokens->value, "': not a valid identifier");
+				tmp->value, "': not a valid identifier");
 			update_vars(&(*data)->env, "?", "1");
 			return ;
 		}
-		if (is_valid_splited((*data)->current_tokens->value) == 1)
-			add_vars_export((*data)->current_tokens->value, data, FALSE);
-		else if (is_valid_splited((*data)->current_tokens->value) == 2)
-			add_vars_export((*data)->current_tokens->value, data, TRUE);
-		(*data)->current_tokens = (*data)->current_tokens->next;
+		if (is_valid_splited(tmp->value) == 1)
+			add_vars_export(tmp->value, data, FALSE);
+		else if (is_valid_splited(tmp->value) == 2)
+			add_vars_export(tmp->value, data, TRUE);
+		tmp = tmp->next;
 	}
 }
