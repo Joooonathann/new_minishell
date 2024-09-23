@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/22 18:13:51 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 12:20:37 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,8 @@ int						is_redirection(char *value);
 t_tokens				*get_tokens_new(t_tokens *tokens);
 int						count_tokens_split(t_tokens **tokens);
 int						nofork_command(t_tokens *tokens);
-void					clean_process(t_minishell **data, t_bool env);
+void					clean_process(t_minishell **data, t_bool env,
+							t_bool data_free);
 void					up_shlvl(t_vars **env);
 void					write_to_heredoc_pipe(int fd, const char *line);
 void					close_heredoc_pipe(int fd);

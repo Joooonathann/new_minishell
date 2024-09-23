@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 16:41:52 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 12:20:26 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_minishell	*init_data(char **envp, t_minishell *data)
 	return (data);
 }
 
-void	clean_process(t_minishell **data, t_bool env)
+void	clean_process(t_minishell **data, t_bool env, t_bool data_free)
 {
 	if ((*data)->tokens)
 		ft_free_tokens(&(*data)->tokens);
@@ -65,6 +65,8 @@ void	clean_process(t_minishell **data, t_bool env)
 		free((*data)->prompt_value);
 	if ((*data)->env && env)
 		delete_all_vars(&(*data)->env);
+	if (*data && data_free)
+		free(*data);
 }
 
 void	execute_process(t_minishell **data)
@@ -74,7 +76,7 @@ void	execute_process(t_minishell **data)
 		signal(SIGINT, SIG_IGN);
 		handler_exec(data);
 		signal(SIGINT, handler_signal);
-		clean_process(data, FALSE);
+		clean_process(data, FALSE, FALSE);
 	}
 }
 
@@ -92,7 +94,7 @@ int	main(int argc, char **argv, char **envp)
 		data = init_data(envp, data);
 		if (!data->prompt)
 		{
-			clean_process(&data, TRUE);
+			clean_process(&data, TRUE, TRUE);
 			printf("exit\n");
 			break ;
 		}

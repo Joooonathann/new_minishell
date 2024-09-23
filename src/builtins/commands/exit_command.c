@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 00:18:11 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/21 16:44:26 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/23 12:20:50 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	is_numeric_argument(const char *str)
 
 void	exit_and_clean(t_minishell **data, int code)
 {
-	clean_process(data, TRUE);
+	clean_process(data, TRUE, TRUE);
 	exit(code);
 }
 
