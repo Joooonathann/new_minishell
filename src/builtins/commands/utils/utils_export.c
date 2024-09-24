@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 15:59:10 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 01:37:01 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 03:52:46 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,17 @@ t_vars	*dup_env(t_vars *vars)
 void	print_env(t_vars *vars)
 {
 	t_vars	*sorted_vars;
-
+	t_vars	*current;
+	
 	sorted_vars = sort_vars(dup_env(vars));
-	while (sorted_vars)
+	current = sorted_vars;
+	while (current)
 	{
-		printf("declare -x %s", sorted_vars->key);
-		if (sorted_vars->value)
-			printf("=\"%s\"", sorted_vars->value);
+		printf("declare -x %s", current->key);
+		if (current->value)
+			printf("=\"%s\"", current->value);
 		printf("\n");
-		sorted_vars = sorted_vars->next;
+		current = current->next;
 	}
 	delete_all_vars(&sorted_vars);
 }
