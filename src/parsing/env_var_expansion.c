@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:33:58 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/22 01:38:02 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:52:35 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ char	*expand_tokens(t_tokens *token, t_vars **env)
 			if (return_env_value(token, i))
 				handle_env_vars(token, &i, env, &expanded_value);
 			else
+			{
+				free(expanded_value);
 				return (ft_strdup(token->value));
+			}	
 		}
 		else
 			expanded_value = add_char_to_str(expanded_value, token->value[i++]);
