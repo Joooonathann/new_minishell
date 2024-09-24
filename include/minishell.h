@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/24 00:51:46 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/25 01:38:52 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int						ft_count_tokens(t_tokens *tokens);
 int						ft_count_value_tokens(t_tokens *tokens);
 t_tokens				**split_tokens(t_tokens *tokens);
 void					ft_free_tokens_split(t_tokens **tokens);
+char					*value_return_expand(t_tokens *token,
+							char *expanded_value);
 
 //	PARSING
 int						count_quote(char *str, t_quote quote_type);

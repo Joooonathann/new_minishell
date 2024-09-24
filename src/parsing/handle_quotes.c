@@ -6,11 +6,17 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 16:09:13 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/22 01:38:06 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/25 01:38:43 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*value_return_expand(t_tokens *token, char *expanded_value)
+{
+	free(expanded_value);
+	return (ft_strdup(token->value));
+}
 
 char	*ft_strcat_dynamic(char *dest, char *src)
 {
