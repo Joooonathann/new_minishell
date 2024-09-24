@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 15:59:10 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/24 03:52:46 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:00:40 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	print_env(t_vars *vars)
 {
 	t_vars	*sorted_vars;
 	t_vars	*current;
-	
+
 	sorted_vars = sort_vars(dup_env(vars));
 	current = sorted_vars;
 	while (current)

@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:29:18 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 22:42:33 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 03:56:35 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	reparse(t_minishell **data)
 {
 	char	*prompt;
 
-	prompt = ft_strdup(compose_tokens((*data)->tokens));
+	prompt = compose_tokens((*data)->tokens);
 	clean_process(data, FALSE, FALSE);
 	(*data)->prompt = ft_strdup(prompt);
 	free(prompt);
