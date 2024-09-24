@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 00:18:11 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/23 12:20:50 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/24 03:21:00 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	exit_command(t_minishell **data)
 	else if (ft_count_tokens((*data)->current_tokens) > 2)
 	{
 		ft_error(1, "bash: exit: too many arguments");
-		exit_and_clean(data, 1);
+		return ;
 	}
 	else if (ft_atoi((*data)->current_tokens->next->value) > 2147483647)
 	{
