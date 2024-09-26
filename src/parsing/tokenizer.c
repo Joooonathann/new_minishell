@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekrause <emeric.yukii@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 16:50:34 by ekrause           #+#    #+#             */
-/*   Updated: 2024/09/22 01:38:24 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:03:38 by ekrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*ms_strtok(char **str, char *delim)
 	i = 0;
 	in_quote = FALSE;
 	quote_type = 0;
-	while (**str == ' ')
+	while (**str == ' ' || **str == '\t')
 		(*str)++;
 	if (!**str)
 		return (NULL);
@@ -105,7 +105,7 @@ void	tokenizer(char **str, t_tokens **tokens)
 	while (**str)
 	{
 		token = NULL;
-		token = ms_strtok(str, " |><");
+		token = ms_strtok(str, " \t|><");
 		if (token)
 			ft_tokenadd_back(tokens, ft_tokennew(token));
 	}
