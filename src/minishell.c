@@ -6,16 +6,19 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/13 18:08:37 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/13 20:45:41 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int		g_signal = 0;
+
 void	handler(int signal)
 {
 	if (signal == SIGINT)
 	{
+		g_signal = 1;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -81,6 +84,11 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		data = init_data(envp, data);
+		if (g_signal)
+		{
+			update_vars(&data->env, "?", "130");
+			g_signal = 0;
+		}
 		if (!data->prompt)
 		{
 			clean_process(&data, TRUE, TRUE);
