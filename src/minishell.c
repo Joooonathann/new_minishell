@@ -6,19 +6,16 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/24 00:42:31 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/13 18:08:37 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_minishell	*g_data;
-
 void	handler(int signal)
 {
 	if (signal == SIGINT)
 	{
-		update_vars(&g_data->env, "?", "130");
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -71,26 +68,28 @@ void	free_current(t_tokens **tokens)
 
 int	main(int argc, char **argv, char **envp)
 {
-	g_data = malloc(sizeof(t_minishell));
-	if (!g_data)
+	t_minishell	*data;
+	
+	data = malloc(sizeof(t_minishell));
+	if (!data)
 		return (1);
-	g_data->env = init_vars(envp);
+	data->env = init_vars(envp);
 	(void)argv;
 	(void)argc;
 	signal(SIGINT, handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		g_data = init_data(envp, g_data);
-		if (!g_data->prompt)
+		data = init_data(envp, data);
+		if (!data->prompt)
 		{
-			clean_process(&g_data, TRUE, TRUE);
+			clean_process(&data, TRUE, TRUE);
 			printf("exit\n");
 			break ;
 		}
-		if (*g_data->prompt)
-			add_history(g_data->prompt);
-		execute_process(&g_data);
+		if (*data->prompt)
+			add_history(data->prompt);
+		execute_process(&data);
 	}
 	return (0);
 }
