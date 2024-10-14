@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:38:01 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/24 00:30:45 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/14 16:47:20 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	handler_signal(int signal)
 		return ;
 	}
 	else if (signal == SIGQUIT)
+	{
+		exit (131);
 		return ;
+	}
 }
 
 int	count_tokens_split(t_tokens **tokens)
