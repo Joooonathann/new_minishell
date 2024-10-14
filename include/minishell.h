@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/10/14 15:57:59 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:55:16 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/ioctl.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <sys/ioctl.h>
 
 typedef unsigned int	t_bool;
 typedef unsigned int	t_quote;
@@ -190,7 +190,6 @@ void					handle_heredoc(t_minishell **data);
 int						is_on_redirection(t_tokens *tokens);
 char					*compose_tokens(t_tokens *tokens);
 void					reparse(t_minishell **data);
-void					handler_signal(int signal);
 int						is_last_heredoc(t_minishell **data);
 void					free_current(t_tokens **tokens);
 void					free_split_tokens(t_tokens **tokens);
@@ -199,5 +198,7 @@ void					handle_symlink(t_minishell **data, char *path,
 							char *current_pwd);
 char					*get_path(t_minishell *data);
 void					free_split(char **split);
+void					update_signal(t_minishell *data);
+void					heredoc_signal(int signal);
 
 #endif

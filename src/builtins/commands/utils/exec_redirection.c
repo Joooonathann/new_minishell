@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:29:18 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/24 03:56:35 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:07:36 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	handle_heredoc(t_minishell **data)
 {
 	int	heredoc_pipe[2];
 
+	signal(SIGINT, heredoc_signal);
+	signal(SIGQUIT, heredoc_signal);
 	if (pipe(heredoc_pipe) == -1)
 	{
 		perror("pipe");

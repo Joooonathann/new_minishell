@@ -6,7 +6,7 @@
 #    By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 11:55:17 by jalbiser          #+#    #+#              #
-#    Updated: 2024/09/24 00:49:56 by jalbiser         ###   ########.fr        #
+#    Updated: 2024/10/14 17:52:44 by jalbiser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRC			=	./src/minishell.c\
 				./src/builtins/commands/utils/exec_system.c\
 				./src/builtins/commands/utils/exec_utils.c\
 				./src/builtins/commands/utils/exec_func.c\
+				./src/builtins/commands/utils/signal.c\
 				./src/builtins/handler_builtins.c\
 				./src/builtins/handler_exec.c
 				

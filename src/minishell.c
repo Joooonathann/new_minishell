@@ -6,26 +6,11 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:19:40 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/14 16:41:47 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:52:12 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int			g_signal = 0;
-
-void	handler(int signal)
-{
-	if (signal == SIGINT)
-	{
-		g_signal = 1;
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	}
-	else if (signal == SIGQUIT)
-		return ;
-}
 
 t_minishell	*init_data(char **envp, t_minishell *data)
 {
@@ -66,15 +51,6 @@ void	free_current(t_tokens **tokens)
 		previous_token = NULL;
 	}
 	*tokens = NULL;
-}
-
-void	update_signal(t_minishell *data)
-{
-	if (g_signal)
-	{
-		update_vars(&data->env, "?", "130");
-		g_signal = 0;
-	}
 }
 
 int	main(int argc, char **argv, char **envp)

@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:38:01 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/14 16:47:20 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:51:39 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,32 +26,6 @@ void	clean_process(t_minishell **data, t_bool env, t_bool data_free)
 		delete_all_vars(&(*data)->env);
 	if (*data && data_free)
 		free(*data);
-}
-
-void	execute_process(t_minishell **data)
-{
-	if ((*data)->tokens)
-	{
-		signal(SIGINT, SIG_IGN);
-		handler_exec(data);
-		signal(SIGINT, handler);
-		clean_process(data, FALSE, FALSE);
-	}
-}
-
-void	handler_signal(int signal)
-{
-	if (signal == SIGINT)
-	{
-		printf("\n");
-		exit(130);
-		return ;
-	}
-	else if (signal == SIGQUIT)
-	{
-		exit (131);
-		return ;
-	}
 }
 
 int	count_tokens_split(t_tokens **tokens)
