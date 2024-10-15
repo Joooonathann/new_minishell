@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:25:43 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/15 10:20:59 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 11:14:05 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	free_files(t_file **files)
 void	fetch_redirection(t_minishell **data, t_tokens *tokens)
 {
 	t_file	*current;
-	
+
 	(*data)->files = get_files(tokens);
 	current = (*data)->files;
 	while ((*data)->files)
