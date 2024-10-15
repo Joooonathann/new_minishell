@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 20:25:43 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/15 21:26:55 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 22:11:02 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,7 @@ void	fetch_redirection(t_minishell **data, t_tokens *tokens)
 	current = (*data)->files;
 	while ((*data)->files)
 	{
-		if (ft_strcmp((*data)->files->type, "<<")
-			&& tokens->type == TYPE_REDIRECTION)
+		if (ft_strcmp((*data)->files->type, "<<"))
 			handle_heredoc(data);
 		(*data)->files = (*data)->files->next;
 	}

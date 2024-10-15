@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:11:43 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/15 11:30:46 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 22:11:40 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static int	check_quotes(t_minishell **data, char **tmp, char *quoted,
 	{
 		if (tmp[i][0] == '"')
 			expand_var_heredoc(&tmp[i], &(*data)->env);
-		printf("%s \t %s \t %s\n", quoted, dbl_quoted, tmp[i]);
 		if (ft_strcmp(tmp[i], quoted) || ft_strcmp(tmp[i], dbl_quoted))
 			return (0);
 		i++;
