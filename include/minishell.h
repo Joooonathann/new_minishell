@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/10/15 16:31:33 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 22:41:53 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ void					fetch_redirection(t_minishell **data, t_tokens *tokens);
 t_file					*get_files(t_tokens *tokens);
 t_file					*new_file(char *value, char *type);
 void					add_file(t_file **tokens, t_file *new);
-int						is_redirection(t_tokens *tokens);
 t_tokens				*get_tokens_new(t_tokens *tokens);
 int						count_tokens_split(t_tokens **tokens);
 int						nofork_command(t_tokens *tokens);
@@ -202,5 +201,6 @@ void					update_signal(t_minishell *data);
 void					heredoc_signal(int signal);
 void					handler_signal(int signal);
 int						expand_verif(t_minishell **data, char *line);
+t_tokens				*ft_tokennew_rework(char *value, t_token_type type);
 
 #endif
