@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:35:52 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/15 16:29:22 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 21:27:13 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ t_tokens	*get_tokens_new(t_tokens *tokens)
 int	is_redirection(t_tokens *tokens)
 {
 	if ((ft_strcmp(tokens->value, ">>") || ft_strcmp(tokens->value, "<<")
-			|| ft_strcmp(tokens->value, "<") || ft_strcmp(tokens->value, ">"))
-		&& tokens->type == TYPE_REDIRECTION)
+			|| ft_strcmp(tokens->value, "<") || ft_strcmp(tokens->value, ">")))
 		return (1);
 	return (0);
 }
