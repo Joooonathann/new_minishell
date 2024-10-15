@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 02:09:36 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/14 17:44:28 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 10:52:26 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ static void	handle_pipe_and_fork(t_minishell **data, int *prev_fd, int i)
 		handle_child(data, *prev_fd, pipefd, i);
 	else
 	{
+		if (is_on_redirection((*data)->tokens_split[i]) == 2)
+			signal(SIGQUIT, SIG_IGN);
 		if ((*data)->tokens_split[i + 1]
 			&& is_on_redirection((*data)->tokens_split[i + 1]) == 2)
 			waitpid(pid, NULL, 0);

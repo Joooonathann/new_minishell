@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:47:09 by ekrause           #+#    #+#             */
-/*   Updated: 2024/10/14 17:55:16 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 10:48:06 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,5 +200,6 @@ char					*get_path(t_minishell *data);
 void					free_split(char **split);
 void					update_signal(t_minishell *data);
 void					heredoc_signal(int signal);
+void					handler_signal(int signal);
 
 #endif

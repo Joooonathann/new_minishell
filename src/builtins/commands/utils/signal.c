@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:50:53 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/14 18:09:26 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 10:49:28 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	handler_signal(int signal)
 	else if (signal == SIGQUIT)
 	{
 		g_signal = 3;
-		write(0, "\n", 1);
+		write(0, "Quit\n", 5);
 	}
 }
 
@@ -66,6 +66,7 @@ void	execute_process(t_minishell **data)
 			g_signal = 0;
 		}
 		signal(SIGINT, handler);
+		signal(SIGQUIT, SIG_IGN);
 		clean_process(data, FALSE, FALSE);
 	}
 }
@@ -79,7 +80,6 @@ void	heredoc_signal(int signal)
 	}
 	else if (signal == SIGQUIT)
 	{
-		g_signal = 0;
-		exit(131);
+		return ;
 	}
 }
