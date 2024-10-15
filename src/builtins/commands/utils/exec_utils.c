@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:35:52 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/22 05:18:45 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:29:22 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_tokens	*get_tokens_new(t_tokens *tokens)
 	result = NULL;
 	while (tokens)
 	{
-		if (is_redirection(tokens->value))
+		if (is_redirection(tokens))
 			tokens = tokens->next;
 		else
 			ft_tokenadd_back(&result, ft_tokennew(tokens->value));
@@ -28,10 +28,11 @@ t_tokens	*get_tokens_new(t_tokens *tokens)
 	return (result);
 }
 
-int	is_redirection(char *value)
+int	is_redirection(t_tokens *tokens)
 {
-	if (ft_strcmp(value, ">>") || ft_strcmp(value, "<<") || ft_strcmp(value,
-			"<") || ft_strcmp(value, ">"))
+	if ((ft_strcmp(tokens->value, ">>") || ft_strcmp(tokens->value, "<<")
+			|| ft_strcmp(tokens->value, "<") || ft_strcmp(tokens->value, ">"))
+		&& tokens->type == TYPE_REDIRECTION)
 		return (1);
 	return (0);
 }
@@ -73,7 +74,7 @@ t_file	*get_files(t_tokens *tokens)
 	result = NULL;
 	while (tokens)
 	{
-		if (is_redirection(tokens->value))
+		if (is_redirection(tokens))
 		{
 			if (tokens->next)
 				add_file(&result, new_file(tokens->next->value, tokens->value));

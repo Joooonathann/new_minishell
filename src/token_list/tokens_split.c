@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 01:37:42 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 16:20:00 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:30:58 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	calculate_size_tokens(t_tokens *tokens)
 	count = 1;
 	while (tokens)
 	{
-		if (ft_strcmp(tokens->value, "|"))
+		if (ft_strcmp(tokens->value, "|") && tokens->type == TYPE_PIPE)
 			count++;
 		tokens = tokens->next;
 	}
@@ -38,7 +38,7 @@ t_tokens	**split_tokens(t_tokens *tokens)
 	result[i] = NULL;
 	while (tokens)
 	{
-		if (ft_strcmp(tokens->value, "|"))
+		if (ft_strcmp(tokens->value, "|") && tokens->type == TYPE_PIPE)
 			result[++i] = NULL;
 		else
 		{
