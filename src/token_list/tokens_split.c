@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 01:37:42 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/10/15 22:43:40 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/16 12:47:18 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ t_tokens	**split_tokens(t_tokens *tokens)
 		if (ft_strcmp(tokens->value, "|") && tokens->type == TYPE_PIPE)
 			result[++i] = NULL;
 		else
-			ft_tokenadd_back(&result[i], ft_tokennew_rework(tokens->value, tokens->type));
+			ft_tokenadd_back(&result[i], ft_tokennew_rework(tokens->value,
+					tokens->type));
 		tokens = tokens->next;
 	}
 	result[i + 1] = NULL;

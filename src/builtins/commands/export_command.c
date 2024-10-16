@@ -6,7 +6,7 @@
 /*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:29:22 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/24 00:50:14 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/16 12:46:59 by jalbiser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	handle_value_append(char *str, t_vars *new, t_vars *tmp, t_bool add)
 	char	*new_value;
 	int		value_start;
 
-	if (tmp->value)
+	if (tmp && tmp->value)
 	{
 		value_start = calculate_size_export(str, add) + 2;
 		new_value = malloc(sizeof(char) * (ft_strlen(tmp->value)
@@ -49,8 +49,10 @@ static void	handle_value_append(char *str, t_vars *new, t_vars *tmp, t_bool add)
 		new->value = new_value;
 	}
 	else
+	{
 		new->value = ft_strndup_range(str, calculate_size_export(str, add) + 2,
 				ft_strlen(str));
+	}
 }
 
 static void	handle_value_set(char *str, t_vars *new, t_bool add)
