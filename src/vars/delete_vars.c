@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   delete_vars.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalbiser <jalbiser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ekrause <emeric.yukii@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 04:02:15 by jalbiser          #+#    #+#             */
-/*   Updated: 2024/09/20 19:39:56 by jalbiser         ###   ########.fr       */
+/*   Updated: 2024/10/18 16:39:45 by ekrause          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ void	up_shlvl(t_vars **env)
 		new = malloc(sizeof(t_vars));
 		if (!new)
 			return ;
-		new->value = ft_strdup("SHLVL");
-		new->key = ft_strdup("0");
+		new->key = ft_strdup("SHLVL");
+		new->value = ft_strdup("0");
 		new->next = NULL;
 		add_vars(new, env);
 	}
